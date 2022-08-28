@@ -24,14 +24,34 @@ namespace Exino.Infrastructure.Identity
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
         }
+        public async Task<AppUser?> AuthenticateUser(string email, string password)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
 
+            if (user == null)
+            {
+                return null;
+            }
+
+            var result = await _userManager.CheckPasswordAsync(user, password);
+
+            if (!result)
+            {
+                return null;
+            }
+
+            return user;
+        }
         public async Task<string> GetUserNameAsync(long userId)
         {
             var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
 
             return user.UserName;
         }
-
+        public Task<IList<string>> GetUserRoles(AppUser user)
+        {
+            return _userManager.GetRolesAsync(user);
+        }
         public async Task<(Result Result, long UserId)> CreateUserAsync(string userName, string password)
         {
             var user = new AppUser

@@ -21,6 +21,7 @@ namespace Exino.Domain.Entities
 
         public long? ModifiedBy { get; set; }
         public Status Status { get; set; }
+        public bool IsSubscribeToNewsletter { get; set; } = false;
 
 
         private readonly List<BaseEvent> _domainEvents = new();
