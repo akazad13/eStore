@@ -36,10 +36,4 @@ app.UseSwaggerDocumentation();
 
 app.MapControllers();
 
-//var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-//using (var scope = scopedFactory.CreateScope())
-//{
-//    await app.Services.SeedDefaultUserAsync(scope);
-//}
-
 app.Run();

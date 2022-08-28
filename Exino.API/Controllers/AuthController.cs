@@ -8,15 +8,12 @@ namespace Exino.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginCommand commnad)
         {
-            try
-            {
-                var auth = await Mediator.Send(commnad);
-                return Ok(auth);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return (await Mediator.Send(commnad)).Match<IActionResult>(Ok, BadRequest);
+        }
+        [HttpPost("signup")]
+        public async Task<IActionResult> Signup(UserSignupCommand commnad)
+        {
+            return (await Mediator.Send(commnad)).Match<IActionResult>(Ok, BadRequest);
         }
     }
 }

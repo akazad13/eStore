@@ -1,5 +1,5 @@
 ﻿using Exino.Application.Common.Interfaces;
-using Exino.Application.Common.Models;
+using Exino.Application.Common.Wrappers;
 using Exino.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -52,15 +52,30 @@ namespace Exino.Infrastructure.Identity
         {
             return _userManager.GetRolesAsync(user);
         }
-        public async Task<(Result Result, long UserId)> CreateUserAsync(string userName, string password)
+        public async Task<(Result Result, long UserId)> CreateUserAsync(
+            string firstName, 
+            string lastName, 
+            string email, 
+            string password,
+            bool isSubscribeToNewsletter,
+            IEnumerable<string> assignedRoles
+        )
         {
             var user = new AppUser
             {
-                UserName = userName,
-                Email = userName,
+                UserName = email,
+                Email = email,
+                FirstName = firstName,
+                LastName = lastName,
+                IsSubscribeToNewsletter = isSubscribeToNewsletter
             };
 
             var result = await _userManager.CreateAsync(user, password);
+            
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRolesAsync(user, assignedRoles);
+            }
 
             return (result.ToApplicationResult(), user.Id);
         }
@@ -100,6 +115,13 @@ namespace Exino.Infrastructure.Identity
             var result = await _userManager.DeleteAsync(user);
 
             return result.ToApplicationResult();
+        }
+
+        public async Task<bool> IsUserExist(string email)
+        {
+            if (email == null)
+                return false;
+            return await _userManager.Users.AnyAsync(u => u.Email == email);
         }
     }
 

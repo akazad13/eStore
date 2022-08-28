@@ -1,4 +1,4 @@
-﻿using Exino.Application.Common.Models;
+﻿using Exino.Application.Common.Wrappers;
 using Microsoft.AspNetCore.Identity;
 
 namespace Exino.Infrastructure.Identity
