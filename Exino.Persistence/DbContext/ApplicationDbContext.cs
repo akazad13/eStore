@@ -47,6 +47,8 @@ namespace Exino.Persistence.DbContext
                 u.Property(x => x.ModifiedBy).HasColumnOrder(10);
                 u.Property(x => x.Status).HasColumnOrder(11);
                 u.Property(x => x.ImagePath).IsRequired(false).HasColumnOrder(12);
+
+                u.Property(x => x.Gender).HasMaxLength(10);
             });
 
             builder.Entity<Role>(r =>
