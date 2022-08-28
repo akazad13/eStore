@@ -2,6 +2,10 @@ using Exino.API;
 using Exino.Application;
 using Exino.Persistence;
 using Exino.Persistence.SeedDatabase;
+using FluentValidation;
+using Microsoft.AspNetCore.Diagnostics;
+using Newtonsoft.Json;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +19,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-
     // Initialise and seed database
     using (var scope = app.Services.CreateScope())
     {
@@ -25,6 +27,59 @@ if (app.Environment.IsDevelopment())
         await initialiser.SeedAsync();
     }
 }
+else
+{
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        try
+        {
+            var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+            var exception = errorFeature.Error;
+
+            if (exception is not ValidationException validationException)
+            {
+                throw exception;
+            }
+
+            var errors = validationException.Errors.Select(err => new
+            {
+                err.PropertyName,
+                err.ErrorMessage,
+            });
+
+            var ret = new
+            {
+                message = "Validation errors occur!",
+                errors = errors,
+                validationError = true
+            };
+
+            context.Response.StatusCode = 400;
+            context.Response.ContentType = "application/json";
+
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(ret), Encoding.UTF8);
+        }
+        catch (Exception ex)
+        {
+            context.Response.StatusCode = 500;
+            context.Response.ContentType = "application/json";
+
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(new
+            {
+                message = ex?.InnerException?.Message ?? ex?.Message ?? "",
+                errors = Array.Empty<string>(),
+                validationError = false
+            }), Encoding.UTF8);
+        }
+    });
+});
+
 
 app.UseHttpsRedirection();
 app.UseRouting();

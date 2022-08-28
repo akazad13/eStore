@@ -4,12 +4,12 @@ using Exino.Application.Common.Wrappers;
 using Exino.Application.CQRS.AppUser.DTOs;
 using MediatR;
 
-namespace Exino.Application.CQRS.AppUser.Commands
+namespace Exino.Application.CQRS.AppUser.Commands.UserLogin
 {
     public class UserLoginCommand : IRequest<IResult<AuthResponse>>
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
     }
     public class UserLoginCommandHandler : IRequestHandler<UserLoginCommand, IResult<AuthResponse>>
     {
@@ -34,8 +34,8 @@ namespace Exino.Application.CQRS.AppUser.Commands
 
             var response = new AuthResponse
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                FirstName = user?.FirstName,
+                LastName = user?.LastName,
                 JWT = await _IJWTTokenHelper.GenerateJwtToken(user)
             };
 

@@ -8,8 +8,8 @@ namespace Exino.Domain.Entities
     public class AppUser: IdentityUser<long>
     {
         public string? ImagePath { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public ICollection<AppUserRole>? UserRoles { get; set; }
 
 

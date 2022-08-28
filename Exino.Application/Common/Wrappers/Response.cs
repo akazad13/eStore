@@ -10,6 +10,7 @@
 
         public string   Message { get; set; }
         public string[] Errors { get; set; }
+        public bool ValidationError { get; set; } = false;
     }
 
     public static class Response<T>
