@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using MediatR;
-using ValidationException = Exino.Application.Common.Exceptions.ValidationException;
 
 namespace Exino.Application.Common.Behaviours
 {

@@ -24,7 +24,7 @@ namespace Exino.Infrastructure.Identity
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
         }
-        public async Task<AppUser?> AuthenticateUser(string email, string password)
+        public async Task<AppUser?> AuthenticateUser(string? email, string? password)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
 
@@ -53,10 +53,10 @@ namespace Exino.Infrastructure.Identity
             return _userManager.GetRolesAsync(user);
         }
         public async Task<(Result Result, long UserId)> CreateUserAsync(
-            string firstName, 
-            string lastName, 
-            string email, 
-            string password,
+            string? firstName, 
+            string? lastName, 
+            string? email, 
+            string? password,
             bool isSubscribeToNewsletter,
             IEnumerable<string> assignedRoles
         )
@@ -80,7 +80,7 @@ namespace Exino.Infrastructure.Identity
             return (result.ToApplicationResult(), user.Id);
         }
 
-        public async Task<bool> IsInRoleAsync(long userId, string role)
+        public async Task<bool> IsInRoleAsync(long userId, string? role)
         {
             var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
@@ -117,7 +117,7 @@ namespace Exino.Infrastructure.Identity
             return result.ToApplicationResult();
         }
 
-        public async Task<bool> IsUserExist(string email)
+        public async Task<bool> IsUserExist(string? email)
         {
             if (email == null)
                 return false;

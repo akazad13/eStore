@@ -31,7 +31,7 @@ namespace Exino.Persistence.DbContext
                 u.ToTable(name: "AppUsers");
 
                 u.Property(u => u.Id).HasColumnOrder(0);
-                u.Property(x => x.UserName).IsRequired().HasMaxLength(20).HasColumnOrder(1);
+                u.Property(x => x.UserName).IsRequired().HasMaxLength(50).HasColumnOrder(1);
                 u.Property(x => x.FirstName).IsRequired().HasMaxLength(50).HasColumnOrder(2);
                 u.Property(x => x.LastName).IsRequired().HasMaxLength(50).HasColumnOrder(3);
                 u.Property(x => x.Email).IsRequired().HasMaxLength(50).HasColumnOrder(4);
