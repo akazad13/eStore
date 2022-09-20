@@ -2,9 +2,9 @@
 using Exino.Application.Common.Mapper;
 using Exino.Domain.Entities;
 
-namespace Exino.Application.CQRS.User.DTOs
+namespace Exino.Application.CQRS.User.Queries.Login
 {
-    public class AuthResponse : IMapFrom<AppUser>
+    public class UserLoginQueryResponse : IMapFrom<AppUser>
     {
         public long Id { get; set; }
         public string? UserName { get; set; }
@@ -19,7 +19,7 @@ namespace Exino.Application.CQRS.User.DTOs
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<AppUser, AuthResponse>();
+            profile.CreateMap<AppUser, UserLoginQueryResponse>();
         }
     }
 }

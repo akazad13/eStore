@@ -5,12 +5,11 @@
         public GenericResponse(string message, IEnumerable<string> errors)
         {
             Message = message;
-            Errors = errors.ToArray();
+            Errors = errors;
         }
 
         public string   Message { get; set; }
-        public string[] Errors { get; set; }
-        public bool ValidationError { get; set; } = false;
+        public IEnumerable<string> Errors { get; set; }
     }
 
     public static class Response<T>

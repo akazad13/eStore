@@ -1,5 +1,4 @@
 ﻿using Exino.Application.Common.Behaviours;
-using Exino.Application.Common.Utilities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +18,6 @@ namespace Exino.Application
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
 
             //Add helper and other services
-            services.AddScoped<IJWTTokenHelper, JWTTokenHelper>();
 
             return services;
         }

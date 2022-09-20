@@ -13,7 +13,20 @@ namespace Exino.API
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-           services.Configure<ConfigModel>(configuration);
+            services.Configure<ConfigModel>(configuration);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "_myAllowSpecificOrigins",
+                                  builder =>
+                                  {
+                                      builder.SetIsOriginAllowed((host) => true)
+                                             .WithOrigins(Origins())
+                                             .AllowAnyHeader()
+                                             .AllowAnyMethod()
+                                             .AllowCredentials();
+                                  });
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -74,7 +87,7 @@ namespace Exino.API
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "Soccer App API", Version = "v1.0" });
+                c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "Exino App API", Version = "v1.0" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -115,6 +128,12 @@ namespace Exino.API
             {
                 c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Exino App Api v1.0");
             });
+        }
+        private static string[] Origins()
+        {
+            return new string[] {
+                "http://localhost:4200"
+            };
         }
     }
 }

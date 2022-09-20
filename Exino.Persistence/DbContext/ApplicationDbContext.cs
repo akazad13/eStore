@@ -22,6 +22,18 @@ namespace Exino.Persistence.DbContext
             _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         }
 
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Material> Materials { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<ProductComment> ProductComments { get; set; }
+        public DbSet<ProductRating> ProductRatings { get; set; }
+        public DbSet<ProductMaterial> ProductMaterials { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -41,14 +53,14 @@ namespace Exino.Persistence.DbContext
                 u.Property(x => x.NormalizedUserName).HasMaxLength(20);
                 u.Property(x => x.NormalizedEmail).HasMaxLength(50);
 
-                u.Property(x => x.CreatedOn).HasColumnOrder(7);
-                u.Property(x => x.CreatedBy).HasColumnOrder(8);
-                u.Property(x => x.ModifiedOn).HasColumnOrder(9);
-                u.Property(x => x.ModifiedBy).HasColumnOrder(10);
-                u.Property(x => x.Status).HasColumnOrder(11);
-                u.Property(x => x.ImagePath).IsRequired(false).HasColumnOrder(12);
-
-                u.Property(x => x.Gender).HasMaxLength(10);
+                u.Property(x => x.Birthdate).HasColumnOrder(7);
+                u.Property(x => x.Gender).HasColumnOrder(8);
+                u.Property(x => x.CreatedOn).HasColumnOrder(9);
+                u.Property(x => x.CreatedBy).HasColumnOrder(10);
+                u.Property(x => x.ModifiedOn).HasColumnOrder(11);
+                u.Property(x => x.ModifiedBy).HasColumnOrder(12);
+                u.Property(x => x.Status).HasColumnOrder(13);
+                u.Property(x => x.ImagePath).IsRequired(false).HasColumnOrder(14);
             });
 
             builder.Entity<Role>(r =>
@@ -102,11 +114,136 @@ namespace Exino.Persistence.DbContext
             {
                 entity.ToTable("UserTokens");
             });
+
+            builder.Entity<Address>(a =>
+            {
+                a.HasOne(x => x.AppUser).WithMany(x => x.Addresses).HasForeignKey(x => x.UserID);
+            });
+
+            builder.Entity<Basket>(b =>
+            {
+                b.Property(x => x.Subtotal).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
+                b.HasOne(x => x.AppUser).WithMany(x => x.Baskets).HasForeignKey(x => x.UserId);
+            });
+
+            builder.Entity<BasketItem>(bi =>
+            {
+                bi.Property(x => x.Quantity).IsRequired();
+                bi.Property(x => x.Price).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
+                bi.Property(x => x.UnitPrice).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
+                bi.HasOne(x => x.Product).WithMany(x => x.BasketItems).HasForeignKey(x => x.ProductID);
+                bi.HasOne(x => x.Basket).WithMany(x => x.BasketItems).HasForeignKey(x => x.BasketId);
+            });
+
+            builder.Entity<Category>(c =>
+            {
+                c.Property(x => x.Name).HasMaxLength(100).IsRequired();
+            });
+
+            builder.Entity<Order>(o =>
+            {
+                o.Property(x => x.Amount).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
+                o.Property(x => x.ShippingAddress).IsRequired();
+                o.HasOne(x => x.AppUser)
+                    .WithMany(x => x.Orders)
+                    .HasForeignKey(x => x.UserId);
+            });
+
+            builder.Entity<OrderDetail>(od =>
+            {
+                od.Property(x => x.Quantity).IsRequired();
+                od.Property(x => x.Price)
+                    .HasPrecision(18, 5)
+                    .HasConversion<decimal>()
+                    .IsRequired();
+
+                od.HasOne(x => x.Product)
+                    .WithMany(x => x.OrdeDetails)
+                    .HasForeignKey(x => x.ProductId);
+
+
+                od.HasOne(x => x.Order)
+                    .WithMany(x => x.OrderDetails)
+                    .HasForeignKey(x => x.OrderId);
+            });
+
+            builder.Entity<Product>(p =>
+            {
+                p.Property(x => x.Name).HasMaxLength(200).IsRequired();
+                p.Property(x => x.Description).IsRequired();
+                p.Property(x => x.ImagePath).IsRequired();
+                p.Property(x => x.Size).IsRequired();
+                p.Property(x => x.Color).IsRequired();
+                p.Property(x => x.Stock).IsRequired();
+                p.Property(x => x.Price)
+                    .HasPrecision(18, 5)
+                    .HasConversion<decimal>()
+                    .IsRequired();
+
+                p.HasOne(x => x.Category)
+                    .WithMany(x => x.Products)
+                    .HasForeignKey(x => x.CategoryId);
+            });
+
+            builder.Entity<ProductComment>(pc =>
+            {
+                pc.HasOne(x => x.AppUser)
+                    .WithMany(x => x.ProductComments)
+                    .HasForeignKey(x => x.UserId).IsRequired(false);
+
+                pc.HasOne(x => x.Product)
+                    .WithMany(x => x.ProductComments)
+                    .HasForeignKey(x => x.ProductId);
+
+                pc.Property(x => x.Text).HasMaxLength(500).IsRequired();
+            });
+
+            builder.Entity<ProductRating>(pr =>
+            {
+                pr.HasOne(x => x.AppUser)
+                    .WithMany(x => x.ProductRatings)
+                    .HasForeignKey(x => x.UserId).IsRequired(false);
+
+
+                pr.HasOne(x => x.Product)
+                    .WithMany(x => x.ProductRatings)
+                    .HasForeignKey(x => x.ProductId);
+
+
+                pr.Property(x => x.Rating)
+                    .HasPrecision(18, 5)
+                    .HasConversion<decimal>()
+                    .IsRequired();
+            });
+
+            builder.Entity<Material>(m =>
+            {
+                m.Property(x => x.Name).HasMaxLength(50).IsRequired();
+            });
+
+            builder.Entity<ProductMaterial>(pm =>
+            {
+                pm.HasKey(x => new { x.MaterialId, x.ProductId });
+
+                pm.HasOne(ur => ur.Product)
+                    .WithMany(r => r.ProductMaterials)
+                    .HasForeignKey(ur => ur.ProductId)
+                    .IsRequired();
+                pm.HasOne(ur => ur.Material)
+                    .WithMany(u => u.ProductMaterials)
+                    .HasForeignKey(ur => ur.MaterialId)
+                    .IsRequired();
+            });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        }
+
+        public DbSet<T> GetDbSet<T>() where T : class
+        {
+            return this.Set<T>();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

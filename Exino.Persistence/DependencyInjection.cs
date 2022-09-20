@@ -1,8 +1,10 @@
-﻿using Exino.Application.Common.Interfaces;
+﻿using Exino.Application.Common.Authentication;
+using Exino.Application.Common.Interfaces;
 using Exino.Domain.Entities;
 using Exino.Infrastructure.Identity;
 using Exino.Infrastructure.Persistence.Interceptors;
 using Exino.Infrastructure.Services;
+using Exino.Persistence.Authentication;
 using Exino.Persistence.DbContext;
 using Exino.Persistence.SeedDatabase;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +39,7 @@ namespace Exino.Persistence
                 opt.Password.RequiredUniqueChars = 0;
             });
 
+            // Need to check here
             builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
             builder.AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager<SignInManager<AppUser>>()
@@ -45,6 +48,7 @@ namespace Exino.Persistence
                 .AddDefaultTokenProviders();
 
 
+            services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
 
