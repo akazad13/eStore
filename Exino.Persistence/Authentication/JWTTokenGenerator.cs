@@ -1,17 +1,19 @@
-﻿using Exino.Application.Common.Interfaces;
+﻿using Exino.Application.Common.Authentication;
+using Exino.Application.Common.Interfaces;
+using Exino.Application.Common.Utilities;
 using Exino.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace Exino.Application.Common.Utilities
+namespace Exino.Persistence.Authentication
 {
-    public class JWTTokenHelper : IJWTTokenHelper
+    public class JWTTokenGenerator : IJWTTokenGenerator
     {
         private readonly ConfigModel _configModel;
         private readonly IIdentityService _identityService;
-        public JWTTokenHelper(
+        public JWTTokenGenerator(
             IOptions<ConfigModel> configModel,
             IIdentityService identityService
         )

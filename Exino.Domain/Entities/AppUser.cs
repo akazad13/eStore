@@ -10,18 +10,22 @@ namespace Exino.Domain.Entities
         public string? ImagePath { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public ICollection<AppUserRole>? UserRoles { get; set; }
-
-
+        public bool IsSubscribeToNewsletter { get; set; } = false;
+        public DateTime? Birthdate { get; set; }
+        public byte Gender { get; set; }
         public DateTimeOffset CreatedOn { get; set; }
-
         public long CreatedBy { get; set; }
-
         public DateTimeOffset? ModifiedOn { get; set; }
-
         public long? ModifiedBy { get; set; }
         public Status Status { get; set; }
-        public bool IsSubscribeToNewsletter { get; set; } = false;
+
+
+        public ICollection<AppUserRole>? UserRoles { get; set; }
+        public ICollection<Order>? Orders { get; set; }
+        public ICollection<ProductComment>? ProductComments { get; set; }
+        public ICollection<ProductRating>? ProductRatings { get; set; }
+        public ICollection<Address>? Addresses { get; set; }
+        public ICollection<Basket>? Baskets { get; set; }
 
 
         private readonly List<BaseEvent> _domainEvents = new();

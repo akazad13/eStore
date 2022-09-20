@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Exino.Application.CQRS.AppUser.Commands.UserLogin
+namespace Exino.Application.CQRS.User.Queries.Login
 {
-    public class UserLoginCommandValidator : AbstractValidator<UserLoginCommand>
+    public class UserLoginQueryValidator : AbstractValidator<UserLoginQueryRequest>
     {
-        public UserLoginCommandValidator()
+        public UserLoginQueryValidator()
         {
             RuleFor(v => v.Email)
                 .MaximumLength(50)

@@ -2,25 +2,16 @@
 using Exino.Application.Common.Wrappers;
 using MediatR;
 
-namespace Exino.Application.CQRS.AppUser.Commands.UserSignup
+namespace Exino.Application.CQRS.User.Commands.Signup
 {
-    public class UserSignupCommand : IRequest<IResult<GenericResponse>>
-    {
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
-        public bool IsSubscribeToNewsletter { get; set; }
-    }
-
-    public class UserSignupCommandHandler : IRequestHandler<UserSignupCommand, IResult<GenericResponse>>
+    public class UserSignupCommandHandler : IRequestHandler<UserSignupCommandRequest, IResult<GenericResponse>>
     {
         private readonly IIdentityService _identityService;
         public UserSignupCommandHandler(IIdentityService identityService)
         {
             _identityService = identityService;
         }
-        public async Task<IResult<GenericResponse>> Handle(UserSignupCommand request, CancellationToken cancellationToken)
+        public async Task<IResult<GenericResponse>> Handle(UserSignupCommandRequest request, CancellationToken cancellationToken)
         {
             var response = await _identityService.IsUserExist(request.Email);
             if (response == true)

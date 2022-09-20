@@ -1,8 +1,8 @@
 ﻿using Exino.Domain.Entities;
 
-namespace Exino.Application.Common.Utilities
+namespace Exino.Application.Common.Authentication
 {
-    public interface IJWTTokenHelper
+    public interface IJWTTokenGenerator
     {
         Task<string> GenerateJwtToken(AppUser user);
     }
