@@ -1,11 +1,13 @@
 ﻿using Exino.Application.Common.Authentication;
 using Exino.Application.Common.Interfaces;
+using Exino.Application.RepositoriesInterface;
 using Exino.Domain.Entities;
 using Exino.Infrastructure.Identity;
 using Exino.Infrastructure.Persistence.Interceptors;
 using Exino.Infrastructure.Services;
 using Exino.Persistence.Authentication;
 using Exino.Persistence.DbContext;
+using Exino.Persistence.Repositories;
 using Exino.Persistence.SeedDatabase;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +53,12 @@ namespace Exino.Persistence
             services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
+
+            //Repo
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductImageRepository, ProductImageRepository>();
+
 
             return services;
         }

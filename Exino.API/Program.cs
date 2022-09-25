@@ -70,9 +70,8 @@ app.UseExceptionHandler(errorApp =>
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(new
             {
-                message = ex?.InnerException?.Message ?? ex?.Message ?? "",
-                errors = Array.Empty<string>(),
-                validationError = false
+                message = "Error Occured!",
+                errors = new string[] { ex?.InnerException?.Message ?? ex?.Message ?? "" }
             }), Encoding.UTF8);
         }
     });

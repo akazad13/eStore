@@ -12,8 +12,7 @@ namespace Exino.Application.CQRS.Product.Commands.CreateProduct
         public string? Size { get; set; }
         public string? Color { get; set; }
         public string? SKU { get; set; }
-        public IFormFile? UploadPath { get; set; }
-        public string? ImagePath { get; set; }
+        public List<IFormFile>? Images { get; set; }
         public int Stock { get; set; } = 0;
         public int CategoryId { get; set; }
     }

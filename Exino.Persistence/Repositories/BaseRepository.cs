@@ -17,9 +17,9 @@ namespace Exino.Persistence.Repositories
             table = _appDbContext.GetDbSet<T>();
         }
 
-        public async Task Commit(CancellationToken cancellationToken)
+        public async Task<bool> Commit(CancellationToken cancellationToken)
         {
-            await _appDbContext.SaveChangesAsync(cancellationToken);
+            return await _appDbContext.SaveChangesAsync(cancellationToken) > 0;
         }
         public async Task<bool> Any(Expression<Func<T, bool>> expression)
         {
@@ -29,6 +29,11 @@ namespace Exino.Persistence.Repositories
         public async Task Create(T entity)
         {
             await table.AddAsync(entity);
+        }
+
+        public async Task Create(List<T> entity)
+        {
+            await table.AddRangeAsync(entity);
         }
 
 
@@ -80,9 +85,9 @@ namespace Exino.Persistence.Repositories
                 return await query.Select(selector).Skip((pageIndex - 1) * pageSize).ToListAsync();
         }
 
-        //public void Update(T entity)
-        //{
-        //    _appDbContext.Entry<T>(entity).State = EntityState.Modified;
-        //}
+        public void Update(T entity)
+        {
+            table.Update(entity).State = EntityState.Modified;
+        }
     }
 }

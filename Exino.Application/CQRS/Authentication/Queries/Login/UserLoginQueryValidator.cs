@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Exino.Application.CQRS.User.Queries.Login
+namespace Exino.Application.CQRS.Authentication.Queries.Login
 {
     public class UserLoginQueryValidator : AbstractValidator<UserLoginQueryRequest>
     {

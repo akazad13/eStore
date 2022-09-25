@@ -1,7 +1,7 @@
 ﻿using Exino.Application.Common.Wrappers;
 using MediatR;
 
-namespace Exino.Application.CQRS.User.Commands.Signup
+namespace Exino.Application.CQRS.Authentication.Commands.Signup
 {
     public class UserSignupCommandRequest : IRequest<IResult<GenericResponse>>
     {
