@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.9.56" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
@@ -20,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\Product\Queries\" />
+    <Folder Include="CQRS\Category\Queries\GetAllCatergory\" />
+    <Folder Include="CQRS\Product\Queries\SearchProductByFilters\" />
   </ItemGroup>
 
 </Project>

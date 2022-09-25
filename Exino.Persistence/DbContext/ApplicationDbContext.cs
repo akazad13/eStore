@@ -33,6 +33,7 @@ namespace Exino.Persistence.DbContext
         public DbSet<ProductComment> ProductComments { get; set; }
         public DbSet<ProductRating> ProductRatings { get; set; }
         public DbSet<ProductMaterial> ProductMaterials { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -171,7 +172,6 @@ namespace Exino.Persistence.DbContext
             {
                 p.Property(x => x.Name).HasMaxLength(200).IsRequired();
                 p.Property(x => x.Description).IsRequired();
-                p.Property(x => x.ImagePath).IsRequired();
                 p.Property(x => x.Size).IsRequired();
                 p.Property(x => x.Color).IsRequired();
                 p.Property(x => x.Stock).IsRequired();
@@ -233,6 +233,14 @@ namespace Exino.Persistence.DbContext
                     .WithMany(u => u.ProductMaterials)
                     .HasForeignKey(ur => ur.MaterialId)
                     .IsRequired();
+            });
+
+
+            builder.Entity<ProductImage>(pi =>
+            {
+                pi.HasOne(x => x.Product)
+                .WithMany(x => x.ProductImages)
+                .HasForeignKey(x => x.ProductId);
             });
         }
 

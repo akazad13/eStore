@@ -1,5 +1,5 @@
-﻿using Exino.Application.CQRS.User.Commands.Signup;
-using Exino.Application.CQRS.User.Queries.Login;
+﻿using Exino.Application.CQRS.Authentication.Commands.Signup;
+using Exino.Application.CQRS.Authentication.Queries.Login;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Exino.API.Controllers

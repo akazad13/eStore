@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Exino.Application.CQRS.User.Commands.Signup
+namespace Exino.Application.CQRS.Authentication.Commands.Signup
 {
     public class UserSignupCommandValidator : AbstractValidator<UserSignupCommandRequest>
     {

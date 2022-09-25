@@ -6,8 +6,9 @@ namespace Exino.Application.RepositoriesInterface
     public interface IBaseRepository<T>
     {
         Task Create(T entity);
-        //void Update(T entity);
-        Task Commit(CancellationToken cancellationToken);
+        Task Create(List<T> entity);
+        void Update(T entity);
+        Task<bool> Commit(CancellationToken cancellationToken);
 
         void Delete(T entity);
         Task<T?> GetDefault(Expression<Func<T, bool>> expression);

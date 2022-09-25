@@ -4,7 +4,7 @@ using Exino.Application.Common.Interfaces;
 using Exino.Application.Common.Wrappers;
 using MediatR;
 
-namespace Exino.Application.CQRS.User.Queries.Login
+namespace Exino.Application.CQRS.Authentication.Queries.Login
 {
 
     public class UserLoginQueryHandler : IRequestHandler<UserLoginQueryRequest, IResult<UserLoginQueryResponse>>

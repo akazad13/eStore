@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using Exino.Application.Common.Mapper;
-using Exino.Domain.Entities;
-
-namespace Exino.Application.CQRS.User.Queries.Login
+﻿namespace Exino.Application.CQRS.Authentication.Queries.Login
 {
-    public class UserLoginQueryResponse : IMapFrom<AppUser>
+    public class UserLoginQueryResponse
     {
         public long Id { get; set; }
         public string? UserName { get; set; }
@@ -16,10 +12,5 @@ namespace Exino.Application.CQRS.User.Queries.Login
         public DateTime? Birthdate { get; set; }
         public string? Gender { get; set; }
         public string? JWT { get; set; }
-
-        public void Mapping(Profile profile)
-        {
-            profile.CreateMap<AppUser, UserLoginQueryResponse>();
-        }
     }
 }
