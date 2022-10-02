@@ -6,9 +6,6 @@ namespace Exino.Persistence.Repositories
 {
     internal class ProductRepository : BaseRepository<Product>, IProductRepository
     {
-        public ProductRepository(IApplicationDbContext appDbContext) : base(appDbContext)
-        {
-
-        }
+        public ProductRepository(IApplicationDbContext appDbContext) : base(appDbContext) { }
     }
 }

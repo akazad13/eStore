@@ -13,6 +13,7 @@ namespace Exino.Persistence.Authentication
     {
         private readonly ConfigModel _configModel;
         private readonly IIdentityService _identityService;
+
         public JWTTokenGenerator(
             IOptions<ConfigModel> configModel,
             IIdentityService identityService
@@ -21,6 +22,7 @@ namespace Exino.Persistence.Authentication
             _configModel = configModel.Value;
             _identityService = identityService;
         }
+
         public async Task<string> GenerateJwtToken(AppUser user)
         {
             var signingKey = Convert.FromBase64String(_configModel.Jwt.SigningSecret);
@@ -31,7 +33,6 @@ namespace Exino.Persistence.Authentication
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-
             };
 
             var userRoles = await _identityService.GetUserRoles(user);
@@ -41,7 +42,10 @@ namespace Exino.Persistence.Authentication
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var creds = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256Signature);
+            var creds = new SigningCredentials(
+                new SymmetricSecurityKey(signingKey),
+                SecurityAlgorithms.HmacSha256Signature
+            );
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

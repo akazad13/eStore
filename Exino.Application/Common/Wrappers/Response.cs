@@ -8,7 +8,7 @@
             Errors = errors;
         }
 
-        public string   Message { get; set; }
+        public string Message { get; set; }
         public IEnumerable<string> Errors { get; set; }
     }
 
@@ -31,7 +31,9 @@
 
         public static IResult<GenericResponse> SuccessResponese(string message)
         {
-            return new Success<GenericResponse>(new GenericResponse(message, Array.Empty<string>()));
+            return new Success<GenericResponse>(
+                new GenericResponse(message, Array.Empty<string>())
+            );
         }
     }
 }

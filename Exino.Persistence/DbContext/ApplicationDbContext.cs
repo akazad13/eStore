@@ -8,10 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Exino.Persistence.DbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser, Role, long, IdentityUserClaim<long>, AppUserRole, IdentityUserLogin<long>, IdentityRoleClaim<long>, IdentityUserToken<long>>, IApplicationDbContext
+    public class ApplicationDbContext
+        : IdentityDbContext<
+            AppUser,
+            Role,
+            long,
+            IdentityUserClaim<long>,
+            AppUserRole,
+            IdentityUserLogin<long>,
+            IdentityRoleClaim<long>,
+            IdentityUserToken<long>
+        >,
+            IApplicationDbContext
     {
         private readonly IMediator _mediator;
         private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
+
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
             IMediator mediator,
@@ -32,7 +44,6 @@ namespace Exino.Persistence.DbContext
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ProductComment> ProductComments { get; set; }
         public DbSet<ProductRating> ProductRatings { get; set; }
-        public DbSet<ProductMaterial> ProductMaterials { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -77,22 +88,22 @@ namespace Exino.Persistence.DbContext
                 r.Property(x => x.ModifiedBy).HasColumnOrder(5);
             });
 
-
             builder.Entity<AppUserRole>(userRole =>
             {
                 userRole.ToTable(name: "UserRoles");
                 userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-                userRole.HasOne(ur => ur.Role)
+                userRole
+                    .HasOne(ur => ur.Role)
                     .WithMany(r => r.UserRoles)
                     .HasForeignKey(ur => ur.RoleId)
                     .IsRequired();
-                userRole.HasOne(ur => ur.AppUser)
+                userRole
+                    .HasOne(ur => ur.AppUser)
                     .WithMany(u => u.UserRoles)
                     .HasForeignKey(ur => ur.UserId)
                     .IsRequired();
             });
-
 
             builder.Entity<IdentityUserClaim<long>>(entity =>
             {
@@ -108,7 +119,6 @@ namespace Exino.Persistence.DbContext
             builder.Entity<IdentityRoleClaim<long>>(entity =>
             {
                 entity.ToTable("RoleClaims");
-
             });
 
             builder.Entity<IdentityUserToken<long>>(entity =>
@@ -123,7 +133,10 @@ namespace Exino.Persistence.DbContext
 
             builder.Entity<Basket>(b =>
             {
-                b.Property(x => x.Subtotal).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
+                b.Property(x => x.Subtotal)
+                    .HasPrecision(18, 5)
+                    .HasConversion<decimal>()
+                    .IsRequired();
                 b.HasOne(x => x.AppUser).WithMany(x => x.Baskets).HasForeignKey(x => x.UserId);
             });
 
@@ -131,9 +144,16 @@ namespace Exino.Persistence.DbContext
             {
                 bi.Property(x => x.Quantity).IsRequired();
                 bi.Property(x => x.Price).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
-                bi.Property(x => x.UnitPrice).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
-                bi.HasOne(x => x.Product).WithMany(x => x.BasketItems).HasForeignKey(x => x.ProductID);
-                bi.HasOne(x => x.Basket).WithMany(x => x.BasketItems).HasForeignKey(x => x.BasketId);
+                bi.Property(x => x.UnitPrice)
+                    .HasPrecision(18, 5)
+                    .HasConversion<decimal>()
+                    .IsRequired();
+                bi.HasOne(x => x.Product)
+                    .WithMany(x => x.BasketItems)
+                    .HasForeignKey(x => x.ProductID);
+                bi.HasOne(x => x.Basket)
+                    .WithMany(x => x.BasketItems)
+                    .HasForeignKey(x => x.BasketId);
             });
 
             builder.Entity<Category>(c =>
@@ -145,27 +165,19 @@ namespace Exino.Persistence.DbContext
             {
                 o.Property(x => x.Amount).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
                 o.Property(x => x.ShippingAddress).IsRequired();
-                o.HasOne(x => x.AppUser)
-                    .WithMany(x => x.Orders)
-                    .HasForeignKey(x => x.UserId);
+                o.HasOne(x => x.AppUser).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
             });
 
             builder.Entity<OrderDetail>(od =>
             {
                 od.Property(x => x.Quantity).IsRequired();
-                od.Property(x => x.Price)
-                    .HasPrecision(18, 5)
-                    .HasConversion<decimal>()
-                    .IsRequired();
+                od.Property(x => x.Price).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
 
                 od.HasOne(x => x.Product)
                     .WithMany(x => x.OrdeDetails)
                     .HasForeignKey(x => x.ProductId);
 
-
-                od.HasOne(x => x.Order)
-                    .WithMany(x => x.OrderDetails)
-                    .HasForeignKey(x => x.OrderId);
+                od.HasOne(x => x.Order).WithMany(x => x.OrderDetails).HasForeignKey(x => x.OrderId);
             });
 
             builder.Entity<Product>(p =>
@@ -175,21 +187,23 @@ namespace Exino.Persistence.DbContext
                 p.Property(x => x.Size).IsRequired();
                 p.Property(x => x.Color).IsRequired();
                 p.Property(x => x.Stock).IsRequired();
-                p.Property(x => x.Price)
-                    .HasPrecision(18, 5)
-                    .HasConversion<decimal>()
-                    .IsRequired();
+                p.Property(x => x.Price).HasPrecision(18, 5).HasConversion<decimal>().IsRequired();
 
                 p.HasOne(x => x.Category)
                     .WithMany(x => x.Products)
                     .HasForeignKey(x => x.CategoryId);
+
+                p.HasOne(x => x.Material)
+                    .WithMany(x => x.Products)
+                    .HasForeignKey(x => x.MaterialId);
             });
 
             builder.Entity<ProductComment>(pc =>
             {
                 pc.HasOne(x => x.AppUser)
                     .WithMany(x => x.ProductComments)
-                    .HasForeignKey(x => x.UserId).IsRequired(false);
+                    .HasForeignKey(x => x.UserId)
+                    .IsRequired(false);
 
                 pc.HasOne(x => x.Product)
                     .WithMany(x => x.ProductComments)
@@ -202,13 +216,12 @@ namespace Exino.Persistence.DbContext
             {
                 pr.HasOne(x => x.AppUser)
                     .WithMany(x => x.ProductRatings)
-                    .HasForeignKey(x => x.UserId).IsRequired(false);
-
+                    .HasForeignKey(x => x.UserId)
+                    .IsRequired(false);
 
                 pr.HasOne(x => x.Product)
                     .WithMany(x => x.ProductRatings)
                     .HasForeignKey(x => x.ProductId);
-
 
                 pr.Property(x => x.Rating)
                     .HasPrecision(18, 5)
@@ -221,26 +234,11 @@ namespace Exino.Persistence.DbContext
                 m.Property(x => x.Name).HasMaxLength(50).IsRequired();
             });
 
-            builder.Entity<ProductMaterial>(pm =>
-            {
-                pm.HasKey(x => new { x.MaterialId, x.ProductId });
-
-                pm.HasOne(ur => ur.Product)
-                    .WithMany(r => r.ProductMaterials)
-                    .HasForeignKey(ur => ur.ProductId)
-                    .IsRequired();
-                pm.HasOne(ur => ur.Material)
-                    .WithMany(u => u.ProductMaterials)
-                    .HasForeignKey(ur => ur.MaterialId)
-                    .IsRequired();
-            });
-
-
             builder.Entity<ProductImage>(pi =>
             {
                 pi.HasOne(x => x.Product)
-                .WithMany(x => x.ProductImages)
-                .HasForeignKey(x => x.ProductId);
+                    .WithMany(x => x.ProductImages)
+                    .HasForeignKey(x => x.ProductId);
             });
         }
 
@@ -254,7 +252,9 @@ namespace Exino.Persistence.DbContext
             return this.Set<T>();
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(
+            CancellationToken cancellationToken = default
+        )
         {
             await _mediator.DispatchDomainEvents(this);
 

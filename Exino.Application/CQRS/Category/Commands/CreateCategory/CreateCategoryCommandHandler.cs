@@ -4,9 +4,10 @@ using Exino.Application.RepositoriesInterface;
 using Exino.Domain.Enums;
 using MediatR;
 
-namespace Exino.Application.CQRS.Category.Commands.CreateProduct
+namespace Exino.Application.CQRS.Category.Commands.CreateCategory
 {
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommandRequest, IResult<GenericResponse>>
+    public class CreateCategoryCommandHandler
+        : IRequestHandler<CreateCategoryCommandRequest, IResult<GenericResponse>>
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
@@ -17,10 +18,11 @@ namespace Exino.Application.CQRS.Category.Commands.CreateProduct
             _mapper = mapper;
         }
 
-
-        public async Task<IResult<GenericResponse>> Handle(CreateCategoryCommandRequest request, CancellationToken cancellationToken)
+        public async Task<IResult<GenericResponse>> Handle(
+            CreateCategoryCommandRequest request,
+            CancellationToken cancellationToken
+        )
         {
-
             var model = _mapper.Map<Domain.Entities.Category>(request);
             model.Status = Status.Active;
 
@@ -34,7 +36,9 @@ namespace Exino.Application.CQRS.Category.Commands.CreateProduct
             }
             else
             {
-                return Response<GenericResponse>.ErrorResponse(new[] { "Failed to save the category" });
+                return Response<GenericResponse>.ErrorResponse(
+                    new[] { "Failed to save the category" }
+                );
             }
         }
     }

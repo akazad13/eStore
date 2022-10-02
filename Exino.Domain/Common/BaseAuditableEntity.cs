@@ -14,5 +14,4 @@ namespace Exino.Domain.Common
 
         public Status Status { get; set; }
     }
-
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Exino.Application.CQRS.Category.Commands.CreateProduct;
+using Exino.Application.CQRS.Category.Commands.CreateCategory;
 using Exino.Domain.Entities;
 
 namespace Exino.Application.Common.Mapper.Profiles

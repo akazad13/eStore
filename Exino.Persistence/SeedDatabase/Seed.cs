@@ -13,7 +13,13 @@ namespace Exino.Persistence.SeedDatabase
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        public Seed(ILogger<Seed> logger, ApplicationDbContext context, UserManager<AppUser> userManager, RoleManager<Role> roleManager)
+
+        public Seed(
+            ILogger<Seed> logger,
+            ApplicationDbContext context,
+            UserManager<AppUser> userManager,
+            RoleManager<Role> roleManager
+        )
         {
             _logger = logger;
             _context = context;
@@ -56,9 +62,24 @@ namespace Exino.Persistence.SeedDatabase
             {
                 var roles = new List<Role>
                 {
-                    new Role{Name = "Admin", CreatedBy = 1, CreatedOn = DateTime.UtcNow},
-                    new Role{Name = "Customer", CreatedBy = 1, CreatedOn = DateTime.UtcNow},
-                    new Role{Name= "Manager", CreatedBy = 1, CreatedOn = DateTime.UtcNow}
+                    new Role
+                    {
+                        Name = "Admin",
+                        CreatedBy = 1,
+                        CreatedOn = DateTime.UtcNow
+                    },
+                    new Role
+                    {
+                        Name = "Customer",
+                        CreatedBy = 1,
+                        CreatedOn = DateTime.UtcNow
+                    },
+                    new Role
+                    {
+                        Name = "Manager",
+                        CreatedBy = 1,
+                        CreatedOn = DateTime.UtcNow
+                    }
                 };
 
                 foreach (var role in roles)
@@ -85,5 +106,4 @@ namespace Exino.Persistence.SeedDatabase
             }
         }
     }
-
 }

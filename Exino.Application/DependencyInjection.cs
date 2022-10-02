@@ -2,6 +2,7 @@
 using Exino.Application.Common.Behaviours;
 using Exino.Application.Common.Mapper;
 using Exino.Application.Common.Services.AWSS3;
+using Exino.Application.Common.Utilities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,7 @@ namespace Exino.Application
             services.AddSingleton(context => AddAutoMapper(new AppDomainTypeFinder()));
 
             //Add helper and other services
+            services.AddScoped<IHelper, Helper>();
             services.AddScoped<IAWSS3Service, AWSS3Service>();
 
             return services;
@@ -34,8 +36,11 @@ namespace Exino.Application
 
             //create and sort instances of mapper configurations
             var instances = mapperConfigurations
-                            .Select(mapperConfiguration => (IOrderedMapperProfile)Activator.CreateInstance(mapperConfiguration))
-                            .OrderBy(mapperConfiguration => mapperConfiguration.Order);
+                .Select(
+                    mapperConfiguration =>
+                        (IOrderedMapperProfile)Activator.CreateInstance(mapperConfiguration)
+                )
+                .OrderBy(mapperConfiguration => mapperConfiguration.Order);
 
             //create AutoMapper configuration
             var config = new MapperConfiguration(cfg =>

@@ -6,12 +6,8 @@ namespace Exino.Application.CQRS.Authentication.Queries.Login
     {
         public UserLoginQueryValidator()
         {
-            RuleFor(v => v.Email)
-                .MaximumLength(50)
-                .NotEmpty()
-                .EmailAddress();
-            RuleFor(v => v.Password)
-                .NotEmpty();
+            RuleFor(v => v.Email).MaximumLength(50).NotEmpty().EmailAddress();
+            RuleFor(v => v.Password).NotEmpty();
         }
     }
 }

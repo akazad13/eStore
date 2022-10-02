@@ -2,7 +2,5 @@
 
 namespace Exino.Application.RepositoriesInterface
 {
-    public interface ICategoryRepository : IBaseRepository<Category>
-    {
-    }
+    public interface ICategoryRepository : IBaseRepository<Category> { }
 }

@@ -6,8 +6,6 @@ namespace Exino.Persistence.Repositories
 {
     public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
-        public CategoryRepository(IApplicationDbContext appDbContext) : base(appDbContext)
-        {
-        }
+        public CategoryRepository(IApplicationDbContext appDbContext) : base(appDbContext) { }
     }
 }

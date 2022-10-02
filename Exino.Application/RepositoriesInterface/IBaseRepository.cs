@@ -14,17 +14,31 @@ namespace Exino.Application.RepositoriesInterface
         Task<T?> GetDefault(Expression<Func<T, bool>> expression);
 
         Task<bool> Any(Expression<Func<T, bool>> expression);
-        Task<TResult?> GetFilteredFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
-                                                                 Expression<Func<T, bool>>? expression,
-                                                                Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool dissableTracing = true);
+        Task<TResult?> GetFilteredFirstOrDefault<TResult>(
+            Expression<Func<T, TResult>> selector,
+            Expression<Func<T, bool>>? expression,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+            bool dissableTracing = true
+        );
 
-        Task<List<TResult>> GetFilteredList<TResult>(Expression<Func<T, TResult>> selector,
-                                                  Expression<Func<T, bool>>? expression,
-                                                   Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-                                    Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
-                                    bool dissableTracing = true,
-                                    int pageIndex = 1,
-                                    int pageSize = 3);
-
+        Task<IPaginate<TResult>> GetFilteredList<TResult>(
+            Expression<Func<T, TResult>> selector,
+            Expression<Func<T, bool>>? expression = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+            int pageNumber = 1,
+            int pageSize = 10,
+            bool disableTracing = true,
+            CancellationToken cancellationToken = default
+        );
+        Task<IPaginate<T>> GetListAsync(
+            Expression<Func<T, bool>>? predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+            int pageNumber = 1,
+            int pageSize = 10,
+            bool disableTracing = true,
+            CancellationToken cancellationToken = default
+        );
     }
 }

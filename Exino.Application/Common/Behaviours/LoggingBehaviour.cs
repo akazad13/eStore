@@ -4,13 +4,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Exino.Application.Common.Behaviours
 {
-    public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where TRequest : notnull
+    public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest>
+        where TRequest : notnull
     {
         private readonly ILogger _logger;
         private readonly ICurrentUserService _currentUserService;
         private readonly IIdentityService _identityService;
 
-        public LoggingBehaviour(ILogger<TRequest> logger, ICurrentUserService currentUserService, IIdentityService identityService)
+        public LoggingBehaviour(
+            ILogger<TRequest> logger,
+            ICurrentUserService currentUserService,
+            IIdentityService identityService
+        )
         {
             _logger = logger;
             _currentUserService = currentUserService;
@@ -28,9 +33,13 @@ namespace Exino.Application.Common.Behaviours
                 userName = await _identityService.GetUserNameAsync(userId);
             }
 
-            _logger.LogInformation("CleanArchitecture Request: {Name} {@UserId} {@UserName} {@Request}",
-                requestName, userId, userName, request);
+            _logger.LogInformation(
+                "CleanArchitecture Request: {Name} {@UserId} {@UserName} {@Request}",
+                requestName,
+                userId,
+                userName,
+                request
+            );
         }
     }
-
 }
