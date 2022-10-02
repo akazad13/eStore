@@ -4,5 +4,4 @@
     {
         DateTimeOffset UtcNow { get; }
     }
-
 }

@@ -2,7 +2,5 @@
 
 namespace Exino.Application.RepositoriesInterface
 {
-    public interface IProductImageRepository : IBaseRepository<ProductImage>
-    {
-    }
+    public interface IProductImageRepository : IBaseRepository<ProductImage> { }
 }

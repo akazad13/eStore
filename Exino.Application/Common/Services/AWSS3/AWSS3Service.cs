@@ -8,6 +8,7 @@ namespace Exino.Application.Common.Services.AWSS3
     public class AWSS3Service : IAWSS3Service
     {
         private readonly ConfigModel _configModel;
+
         public AWSS3Service(IOptions<ConfigModel> configModel)
         {
             _configModel = configModel.Value;
@@ -56,7 +57,6 @@ namespace Exino.Application.Common.Services.AWSS3
                 error = Ex;
                 return false;
             }
-
         }
 
         public async Task<bool> DeleteFileS3(string filename)
@@ -124,14 +124,12 @@ namespace Exino.Application.Common.Services.AWSS3
                 expiryUrlRequest.Verb = Amazon.S3.HttpVerb.GET;
                 expiryUrlRequest.Expires = DateTime.Now.AddMilliseconds(50000);
 
-
                 url = Client.GetPreSignedURL(expiryUrlRequest);
             }
             catch (Exception ex)
             {
                 url = "File Link Error: " + ex.Message;
             }
-
 
             return url;
         }

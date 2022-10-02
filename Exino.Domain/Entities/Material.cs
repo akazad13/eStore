@@ -6,6 +6,7 @@ namespace Exino.Domain.Entities
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public ICollection<ProductMaterial>? ProductMaterials { get; set; }
+        public ICollection<Product>? Products { get; set; }
+        public string? MaterialImagePath { get; set; }
     }
 }

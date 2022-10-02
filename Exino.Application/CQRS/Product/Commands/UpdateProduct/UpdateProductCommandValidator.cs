@@ -1,4 +1,4 @@
-﻿namespace Exino.Application.CQRS.Product.Commands.CreateProduct
+﻿namespace Exino.Application.CQRS.Product.Commands.UpdateProduct
 {
     public class UpdateProductCommandValidator
     {

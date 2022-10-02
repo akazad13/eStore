@@ -10,9 +10,7 @@ namespace Exino.Application.Common.Mapper
 
         #region Ctor
 
-        public AppDomainTypeFinder()
-        {
-        }
+        public AppDomainTypeFinder() { }
 
         #endregion
 
@@ -23,7 +21,10 @@ namespace Exino.Application.Common.Mapper
             return FindClassesOfType(typeof(T), onlyConcreteClasses);
         }
 
-        public IEnumerable<Type> FindClassesOfType(Type assignTypeFrom, bool onlyConcreteClasses = true)
+        public IEnumerable<Type> FindClassesOfType(
+            Type assignTypeFrom,
+            bool onlyConcreteClasses = true
+        )
         {
             return FindClassesOfType(assignTypeFrom, GetAssemblies(), onlyConcreteClasses);
         }
@@ -38,7 +39,11 @@ namespace Exino.Application.Common.Mapper
             return assemblies;
         }
 
-        public IEnumerable<Type> FindClassesOfType(Type assignTypeFrom, IEnumerable<Assembly> assemblies, bool onlyConcreteClasses = true)
+        public IEnumerable<Type> FindClassesOfType(
+            Type assignTypeFrom,
+            IEnumerable<Assembly> assemblies,
+            bool onlyConcreteClasses = true
+        )
         {
             var result = new List<Type>();
             try
@@ -50,9 +55,7 @@ namespace Exino.Application.Common.Mapper
                     {
                         types = a.GetTypes();
                     }
-                    catch
-                    {
-                    }
+                    catch { }
 
                     if (types == null)
                         continue;
@@ -91,7 +94,10 @@ namespace Exino.Application.Common.Mapper
 
         #region Private Methods
 
-        private void AddAssembliesInAppDomain(List<string> addedAssemblyNames, List<Assembly> assemblies)
+        private void AddAssembliesInAppDomain(
+            List<string> addedAssemblyNames,
+            List<Assembly> assemblies
+        )
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {

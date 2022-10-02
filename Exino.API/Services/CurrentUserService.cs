@@ -11,13 +11,16 @@ namespace Exino.API.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
+
         public long UserId => UserIdString();
 
         private long UserIdString()
         {
-            _ = long.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier), out long userid);
+            _ = long.TryParse(
+                _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier),
+                out long userid
+            );
             return userid;
-
         }
     }
 }

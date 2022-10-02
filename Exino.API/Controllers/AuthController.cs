@@ -1,9 +1,11 @@
 ﻿using Exino.Application.CQRS.Authentication.Commands.Signup;
 using Exino.Application.CQRS.Authentication.Queries.Login;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Exino.API.Controllers
 {
+    [AllowAnonymous]
     public class AuthController : ApiControllerBase
     {
         [HttpPost("login")]
@@ -11,6 +13,7 @@ namespace Exino.API.Controllers
         {
             return (await Mediator.Send(commnad)).Match<IActionResult>(Ok, BadRequest);
         }
+
         [HttpPost("signup")]
         public async Task<IActionResult> Signup(UserSignupCommandRequest commnad)
         {

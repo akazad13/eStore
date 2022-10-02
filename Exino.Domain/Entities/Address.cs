@@ -7,7 +7,6 @@ namespace Exino.Domain.Entities
         public long Id { get; set; }
         public string? Street { get; set; }
 
-
         public string? Street2 { get; set; }
 
         public string? City { get; set; }

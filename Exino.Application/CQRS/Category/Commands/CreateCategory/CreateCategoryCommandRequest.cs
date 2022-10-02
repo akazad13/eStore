@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Exino.Application.CQRS.Category.Commands.CreateProduct
+namespace Exino.Application.CQRS.Category.Commands.CreateCategory
 {
     public class CreateCategoryCommandRequest : IRequest<IResult<GenericResponse>>
     {

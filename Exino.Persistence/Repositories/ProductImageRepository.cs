@@ -6,9 +6,6 @@ namespace Exino.Persistence.Repositories
 {
     public class ProductImageRepository : BaseRepository<ProductImage>, IProductImageRepository
     {
-        public ProductImageRepository(IApplicationDbContext appDbContext) : base(appDbContext)
-        {
-
-        }
+        public ProductImageRepository(IApplicationDbContext appDbContext) : base(appDbContext) { }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Exino.Application.Common.Interfaces;
+﻿using Core.Persistence.Paging;
+using Exino.Application.Common.Interfaces;
 using Exino.Application.RepositoriesInterface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -21,6 +22,7 @@ namespace Exino.Persistence.Repositories
         {
             return await _appDbContext.SaveChangesAsync(cancellationToken) > 0;
         }
+
         public async Task<bool> Any(Expression<Func<T, bool>> expression)
         {
             return await table.AnyAsync(expression);
@@ -36,7 +38,6 @@ namespace Exino.Persistence.Repositories
             await table.AddRangeAsync(entity);
         }
 
-
         public void Delete(T entity)
         {
             table.Remove(entity);
@@ -47,10 +48,12 @@ namespace Exino.Persistence.Repositories
             return await table.FirstOrDefaultAsync(expression);
         }
 
-        public async Task<TResult?> GetFilteredFirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
-                                                                      Expression<Func<T, bool>>? expression = null,
-                                                                      Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
-                                                                      bool disableTracing = true)
+        public async Task<TResult?> GetFilteredFirstOrDefault<TResult>(
+            Expression<Func<T, TResult>> selector,
+            Expression<Func<T, bool>>? expression = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+            bool disableTracing = true
+        )
         {
             IQueryable<T> query = table;
 
@@ -66,23 +69,56 @@ namespace Exino.Persistence.Repositories
             return await query.Select(selector).FirstOrDefaultAsync();
         }
 
-        public async Task<List<TResult>> GetFilteredList<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool disableTracing = true, int pageIndex = 1, int pageSize = 3)
+        public async Task<IPaginate<TResult>> GetFilteredList<TResult>(
+            Expression<Func<T, TResult>> selector,
+            Expression<Func<T, bool>>? expression = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+            int pageNumber = 1,
+            int pageSize = 10,
+            bool disableTracing = true,
+            CancellationToken cancellationToken = default
+        )
         {
-            IQueryable<T> query = table;
-
+            IQueryable<T> queryable = table;
             if (disableTracing)
-                query = query.AsNoTracking();
-
+                queryable = queryable.AsNoTracking();
             if (include != null)
-                query = include(query);
-
+                queryable = include(queryable);
             if (expression != null)
-                query = query.Where(expression);
+                queryable = queryable.Where(expression);
 
             if (orderBy != null)
-                return await orderBy(query).Select(selector).Skip((pageIndex - 1) * pageSize).ToListAsync();
+                return await orderBy(queryable)
+                    .Select(selector)
+                    .ToPaginateAsync(pageNumber, pageSize, cancellationToken);
             else
-                return await query.Select(selector).Skip((pageIndex - 1) * pageSize).ToListAsync();
+                return await queryable
+                    .Select(selector)
+                    .ToPaginateAsync(pageNumber, pageSize, cancellationToken);
+        }
+
+        public async Task<IPaginate<T>> GetListAsync(
+            Expression<Func<T, bool>>? predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+            int pageNumber = 1,
+            int pageSize = 10,
+            bool disableTracing = true,
+            CancellationToken cancellationToken = default
+        )
+        {
+            IQueryable<T> queryable = table;
+            if (disableTracing)
+                queryable = queryable.AsNoTracking();
+            if (include != null)
+                queryable = include(queryable);
+            if (predicate != null)
+                queryable = queryable.Where(predicate);
+            if (orderBy != null)
+                return await orderBy(queryable)
+                    .ToPaginateAsync(pageNumber, pageSize, cancellationToken);
+            return await queryable.ToPaginateAsync(pageNumber, pageSize, cancellationToken);
         }
 
         public void Update(T entity)

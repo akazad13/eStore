@@ -14,11 +14,12 @@ namespace Exino.Domain.Entities
         public int Stock { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+        public int MaterialId { get; set; }
+        public Material? Material { get; set; }
         public ICollection<OrderDetail>? OrdeDetails { get; set; }
         public ICollection<BasketItem>? BasketItems { get; set; }
         public ICollection<ProductComment>? ProductComments { get; set; }
         public ICollection<ProductRating>? ProductRatings { get; set; }
-        public ICollection<ProductMaterial>? ProductMaterials { get; set; }
         public ICollection<ProductImage>? ProductImages { get; set; }
     }
 }

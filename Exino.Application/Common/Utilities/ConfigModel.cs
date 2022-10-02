@@ -16,6 +16,7 @@
 
         public string? ValidAudience { get; set; }
     }
+
     public class AWS
     {
         public string? ImageBucketName { get; set; }

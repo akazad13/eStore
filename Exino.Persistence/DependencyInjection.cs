@@ -18,9 +18,13 @@ namespace Exino.Persistence
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services,
+            IConfiguration configuration
+        )
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (services == null)
+                throw new ArgumentNullException(nameof(services));
 
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
             services.AddScoped<Seed>();
@@ -29,10 +33,13 @@ namespace Exino.Persistence
             {
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                );
             });
 
-            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+            services.AddScoped<IApplicationDbContext>(
+                provider => provider.GetRequiredService<ApplicationDbContext>()
+            );
 
             var builder = services.AddIdentityCore<AppUser>(opt =>
             {
@@ -43,12 +50,12 @@ namespace Exino.Persistence
 
             // Need to check here
             builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
-            builder.AddEntityFrameworkStores<ApplicationDbContext>()
+            builder
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager<SignInManager<AppUser>>()
                 .AddRoleManager<RoleManager<Role>>()
                 .AddRoleValidator<RoleValidator<Role>>()
                 .AddDefaultTokenProviders();
-
 
             services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
             services.AddTransient<IDateTime, DateTimeService>();
@@ -58,7 +65,7 @@ namespace Exino.Persistence
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductImageRepository, ProductImageRepository>();
-
+            services.AddScoped<IMaterialRepository, MaterialRepository>();
 
             return services;
         }

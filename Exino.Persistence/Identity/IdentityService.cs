@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Exino.Infrastructure.Identity
 {
-
-
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<AppUser> _userManager;
@@ -18,12 +16,14 @@ namespace Exino.Infrastructure.Identity
         public IdentityService(
             UserManager<AppUser> userManager,
             IUserClaimsPrincipalFactory<AppUser> userClaimsPrincipalFactory,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService
+        )
         {
             _userManager = userManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
         }
+
         public async Task<AppUser?> AuthenticateUser(string? email, string? password)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
@@ -42,20 +42,23 @@ namespace Exino.Infrastructure.Identity
 
             return user;
         }
+
         public async Task<string> GetUserNameAsync(long userId)
         {
             var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
 
             return user.UserName;
         }
+
         public Task<IList<string>> GetUserRoles(AppUser user)
         {
             return _userManager.GetRolesAsync(user);
         }
+
         public async Task<(Result Result, long UserId)> CreateUserAsync(
-            string? firstName, 
-            string? lastName, 
-            string? email, 
+            string? firstName,
+            string? lastName,
+            string? email,
             string? password,
             bool isSubscribeToNewsletter,
             IEnumerable<string> assignedRoles
@@ -71,7 +74,7 @@ namespace Exino.Infrastructure.Identity
             };
 
             var result = await _userManager.CreateAsync(user, password);
-            
+
             if (result.Succeeded)
             {
                 await _userManager.AddToRolesAsync(user, assignedRoles);
@@ -124,5 +127,4 @@ namespace Exino.Infrastructure.Identity
             return await _userManager.Users.AnyAsync(u => u.Email == email);
         }
     }
-
 }

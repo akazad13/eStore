@@ -1,5 +1,6 @@
 ﻿using Exino.Application.Common.Interfaces;
 using Exino.Domain.Common;
+using Exino.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -20,14 +21,21 @@ namespace Exino.Infrastructure.Persistence.Interceptors
             _dateTime = dateTime;
         }
 
-        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+        public override InterceptionResult<int> SavingChanges(
+            DbContextEventData eventData,
+            InterceptionResult<int> result
+        )
         {
             UpdateEntities(eventData.Context);
 
             return base.SavingChanges(eventData, result);
         }
 
-        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData,
+            InterceptionResult<int> result,
+            CancellationToken cancellationToken = default
+        )
         {
             UpdateEntities(eventData.Context);
 
@@ -36,7 +44,8 @@ namespace Exino.Infrastructure.Persistence.Interceptors
 
         public void UpdateEntities(DbContext? context)
         {
-            if (context == null) return;
+            if (context == null)
+                return;
 
             foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
             {
@@ -44,12 +53,14 @@ namespace Exino.Infrastructure.Persistence.Interceptors
                 {
                     entry.Entity.CreatedBy = _currentUserService.UserId;
                     entry.Entity.CreatedOn = _dateTime.UtcNow;
+                    entry.Entity.Status = Status.Active;
                 }
 
-                if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
+                if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
                 {
                     entry.Entity.ModifiedBy = _currentUserService.UserId;
                     entry.Entity.ModifiedOn = _dateTime.UtcNow;
+                    entry.Entity.Status = Status.Modified;
                 }
             }
         }
@@ -58,10 +69,14 @@ namespace Exino.Infrastructure.Persistence.Interceptors
     public static class Extensions
     {
         public static bool HasChangedOwnedEntities(this EntityEntry entry) =>
-            entry.References.Any(r =>
-                r.TargetEntry != null &&
-                r.TargetEntry.Metadata.IsOwned() &&
-                (r.TargetEntry.State == EntityState.Added || r.TargetEntry.State == EntityState.Modified));
+            entry.References.Any(
+                r =>
+                    r.TargetEntry != null
+                    && r.TargetEntry.Metadata.IsOwned()
+                    && (
+                        r.TargetEntry.State == EntityState.Added
+                        || r.TargetEntry.State == EntityState.Modified
+                    )
+            );
     }
-
 }

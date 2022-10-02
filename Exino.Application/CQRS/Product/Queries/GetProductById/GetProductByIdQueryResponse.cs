@@ -1,4 +1,5 @@
-﻿using Exino.Domain.Entities;
+﻿using Exino.Application.CQRS.Product.Dtos;
+using Exino.Domain.Entities;
 
 namespace Exino.Application.CQRS.Product.Queries.GetProductById
 {
@@ -14,7 +15,7 @@ namespace Exino.Application.CQRS.Product.Queries.GetProductById
         public int Stock { get; set; }
         public string? CategoryName { get; set; }
         public int? TotalComments { get; set; }
-        public List<ProductComment>? ProductComments { get; set; }
+        public List<ProductCommentDto>? ProductComments { get; set; }
         public decimal? Rating { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Exino.Domain.Entities
 {
-    public class AppUser: IdentityUser<long>
+    public class AppUser : IdentityUser<long>
     {
         public string? ImagePath { get; set; }
         public string? FirstName { get; set; }
@@ -19,14 +19,12 @@ namespace Exino.Domain.Entities
         public long? ModifiedBy { get; set; }
         public Status Status { get; set; }
 
-
         public ICollection<AppUserRole>? UserRoles { get; set; }
         public ICollection<Order>? Orders { get; set; }
         public ICollection<ProductComment>? ProductComments { get; set; }
         public ICollection<ProductRating>? ProductRatings { get; set; }
         public ICollection<Address>? Addresses { get; set; }
         public ICollection<Basket>? Baskets { get; set; }
-
 
         private readonly List<BaseEvent> _domainEvents = new();
 

@@ -17,7 +17,7 @@ namespace Exino.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -348,6 +348,9 @@ namespace Exino.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("MaterialImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
@@ -486,6 +489,9 @@ namespace Exino.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
+
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
@@ -517,6 +523,8 @@ namespace Exino.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("MaterialId");
 
                     b.ToTable("Products");
                 });
@@ -581,6 +589,9 @@ namespace Exino.Persistence.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("IsThumbnail")
+                        .HasColumnType("bit");
+
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
@@ -598,21 +609,6 @@ namespace Exino.Persistence.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
-                });
-
-            modelBuilder.Entity("Exino.Domain.Entities.ProductMaterial", b =>
-                {
-                    b.Property<int>("MaterialId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MaterialId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductMaterials");
                 });
 
             modelBuilder.Entity("Exino.Domain.Entities.ProductRating", b =>
@@ -897,7 +893,15 @@ namespace Exino.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Exino.Domain.Entities.Material", "Material")
+                        .WithMany("Products")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Material");
                 });
 
             modelBuilder.Entity("Exino.Domain.Entities.ProductComment", b =>
@@ -924,25 +928,6 @@ namespace Exino.Persistence.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Exino.Domain.Entities.ProductMaterial", b =>
-                {
-                    b.HasOne("Exino.Domain.Entities.Material", "Material")
-                        .WithMany("ProductMaterials")
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Exino.Domain.Entities.Product", "Product")
-                        .WithMany("ProductMaterials")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Material");
 
                     b.Navigation("Product");
                 });
@@ -1032,7 +1017,7 @@ namespace Exino.Persistence.Migrations
 
             modelBuilder.Entity("Exino.Domain.Entities.Material", b =>
                 {
-                    b.Navigation("ProductMaterials");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Exino.Domain.Entities.Order", b =>
@@ -1049,8 +1034,6 @@ namespace Exino.Persistence.Migrations
                     b.Navigation("ProductComments");
 
                     b.Navigation("ProductImages");
-
-                    b.Navigation("ProductMaterials");
 
                     b.Navigation("ProductRatings");
                 });
