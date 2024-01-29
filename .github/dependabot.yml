@@ -6,7 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/shopizy.SPA" # Location of package manifests
+    directory: "/eStore.SPA" # Location of package manifests
     schedule:
       interval: "weekly"
 
