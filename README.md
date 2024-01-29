@@ -1,2 +1,2 @@
-# Shopizy
+# Online Store
  
