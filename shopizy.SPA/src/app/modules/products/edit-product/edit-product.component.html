@@ -1,0 +1,182 @@
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">Edit Product</div>
+        <div class="card-body">
+          <form [formGroup]="editProductForm" class="theme-form">
+            <div
+              *ngIf="editProductForm.errors?.['server']"
+              class="alert alert-sm alert-danger"
+            >
+              {{ editProductForm.errors?.['server'] }}
+            </div>
+            <div class="row">
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Product Name</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Description</label>
+                <textarea
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                ></textarea>
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Product Details</label>
+                <textarea
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                ></textarea>
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name"
+                  >Product Category</label
+                >
+                <select class="form-select">
+                  <option value="">Select a category</option>
+                </select>
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">SKU</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Price</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Discount</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Varients</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Tags</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row pt-4">
+              <div class="col-12">
+                <button
+                  class="btn btn-primary btn-block"
+                  type="submit"
+                  [class.spinner]="updateProductInProgress"
+                  (click)="updateProduct()"
+                >
+                  <span>Update</span>
+                </button>
+                <button
+                  class="btn btn-danger btn-block margin-left-10"
+                  type="button"
+                  (click)="back()"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

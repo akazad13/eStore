@@ -1,0 +1,236 @@
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="addProductForm" class="theme-form">
+            <div
+              *ngIf="addProductForm.errors?.['server']"
+              class="alert alert-sm alert-danger"
+            >
+              {{ addProductForm.errors?.['server'] }}
+            </div>
+            <div class="row">
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Product Name</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Product name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="category"
+                  >Product Category</label
+                >
+                <select
+                  class="form-select"
+                  formControlName="category"
+                  [class.is-invalid]="category | isInvalid"
+                >
+                  <option value="">Select a category</option>
+                  <option
+                    *ngFor="let category of categories"
+                    [value]="category.id"
+                  >
+                    {{ category.name }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">
+                  <div *ngIf="category | hasError: 'required'">
+                    Product category is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="description"
+                  >Description</label
+                >
+                <angular-editor
+                  formControlName="description"
+                  [config]="editorConfig"
+                ></angular-editor>
+                <!-- <textarea
+                  id="description"
+                  formControlName="description"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="description | isInvalid"
+                ></textarea> -->
+                <div class="invalid-feedback">
+                  <div *ngIf="description | hasError: 'required'">
+                    Product description is required
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="form-group col-12">
+                <label class="col-form-label" for="productDetails"
+                  >Product Details</label
+                >
+                <textarea
+                  id="productDetails"
+                  formControlName="productDetails"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="productDetails | isInvalid"
+                  [maxLength]="50"
+                ></textarea>
+                <div class="invalid-feedback">
+                  <div *ngIf="productDetails | hasError: 'required'">
+                    Product details is required
+                  </div>
+                </div>
+              </div> -->
+
+              <div class="form-group col-12">
+                <label class="col-form-label" for="sku">SKU/ID</label>
+                <input
+                  id="sku"
+                  formControlName="sku"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="sku | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="sku | hasError: 'required'">SKU is required</div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="price">Price</label>
+                <input
+                  id="price"
+                  formControlName="price"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="price | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="price | hasError: 'required'">
+                    Price is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label class="col-form-label" for="discount">Discount</label>
+                <input
+                  id="discount"
+                  formControlName="discount"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="discount | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="discount | hasError: 'required'">
+                    Discount is required
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="form-group col-12">
+                <label class="col-form-label" for="tags">Tags</label>
+                <input
+                  id="tags"
+                  formControlName="tags"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="tags | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="tags | hasError: 'required'">
+                    Tags is required
+                  </div>
+                </div>
+              </div> -->
+              <div class="form-group col-12">
+                <div class="form-group">
+                  <label class="col-form-label" for="productImages"
+                    >Product Image(s)</label
+                  >
+                  <input
+                    id="productImages"
+                    class="form-control"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    (change)="onChange($event)"
+                  />
+                  <div class="row pb-2">
+                    <div
+                      class="col-md-3"
+                      *ngFor="let url of urls; let i = index"
+                    >
+                      <div class="card mt-4">
+                        <div class="card-body text-center">
+                          <img
+                            class="image img-thumbnail"
+                            [src]="url"
+                            style="height: 200px"
+                          />
+                          <div class="radio radio-primary pt-4">
+                            <input
+                              type="radio"
+                              name="productImage"
+                              value=""
+                              id="image-{{ i }}"
+                            />
+                            <label for="image-{{ i }}">
+                              SetThumbnailImage</label
+                            >
+                          </div>
+                        </div>
+                        <div class="card-footer text-center">
+                          <button
+                            type="button"
+                            class="btn btn-danger"
+                            onclick="removeImage(this)"
+                          >
+                            <i class="fa fa-times"></i>
+                            RemovePicture
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="hidden" name="ProductPictures" id="pictureIDs" />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer text-center">
+          <div class="row pt-4">
+            <div class="col-12">
+              <button
+                class="btn btn-primary btn-block"
+                type="submit"
+                [class.spinner]="saveInProgress"
+                (click)="addProduct()"
+              >
+                <span>Save</span>
+              </button>
+              <button
+                class="btn btn-danger btn-block margin-left-10"
+                type="button"
+                (click)="back()"
+              >
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

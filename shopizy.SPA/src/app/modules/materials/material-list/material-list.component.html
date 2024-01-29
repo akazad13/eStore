@@ -1,0 +1,91 @@
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-sm-4">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter the material name"
+                [(ngModel)]="searchMaterial"
+              />
+            </div>
+            <div class="col-sm-4">
+              <button
+                class="btn btn-secondary"
+                type="button"
+                (click)="getMaterials()"
+              >
+                <i class="fa fa-search"></i> Search
+              </button>
+              <button class="btn btn-danger margin-left-10" type="button">
+                <i class="fa fa-refresh"></i> Reset
+              </button>
+              <button
+                class="btn btn-primary margin-left-10 float-right"
+                type="button"
+                routerLink="/materials/add"
+              >
+                <i class="fa fa-plus"></i> Add New Material
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="width-40">Name</th>
+                  <th class="width-40">Material Image</th>
+                  <th class="width-20">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let material of materials">
+                  <td class="width-40">{{ material.name }}</td>
+                  <td class="width-40">{{ material.materialImagePath }}</td>
+                  <td class="width-20">
+                    <button
+                      class="btn btn-secondary"
+                      type="button"
+                      routerLink="/materials/edit/{{ material.id }}"
+                    >
+                      <i class="fa fa-edit"></i> Edit</button
+                    ><button
+                      class="btn btn-danger margin-left-10"
+                      type="button"
+                    >
+                      <i class="fa fa-trash-o"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="d-flex justify-content-center"
+      *ngIf="!!pagination && pagination.totalItems > 0"
+    >
+      <pagination
+        [boundaryLinks]="true"
+        [totalItems]="pagination.totalItems"
+        [itemsPerPage]="pagination.pageSize"
+        [(ngModel)]="pagination.currentPage"
+        (pageChanged)="pageChanged($event)"
+        previousText="&lsaquo;"
+        nextText="&rsaquo;"
+        firstText="&laquo;"
+        lastText="&raquo;"
+      >
+      </pagination>
+    </div>
+  </div>
+</div>

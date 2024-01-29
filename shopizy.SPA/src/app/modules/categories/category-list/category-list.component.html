@@ -1,0 +1,89 @@
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-sm-4">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter the material name"
+                [(ngModel)]="searchCategory"
+              />
+            </div>
+            <div class="col-sm-4">
+              <button
+                class="btn btn-secondary"
+                type="button"
+                (click)="getCategories()"
+              >
+                <i class="fa fa-search"></i> Search
+              </button>
+              <button class="btn btn-danger margin-left-10" type="button">
+                <i class="fa fa-refresh"></i> Reset
+              </button>
+              <button
+                class="btn btn-primary margin-left-10 float-right"
+                type="button"
+                routerLink="/categories/add"
+              >
+                <i class="fa fa-plus"></i> Add New Category
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="width-70">Name</th>
+                  <th class="width-30">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let category of categories">
+                  <td class="width-70">{{ category.name }}</td>
+                  <td class="width-30">
+                    <button
+                      class="btn btn-secondary"
+                      type="button"
+                      routerLink="/categories/edit/{{ category.id }}"
+                    >
+                      <i class="fa fa-edit"></i> Edit</button
+                    ><button
+                      class="btn btn-danger margin-left-10"
+                      type="button"
+                    >
+                      <i class="fa fa-trash-o"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="d-flex justify-content-center"
+      *ngIf="!!pagination && pagination.totalItems > 0"
+    >
+      <pagination
+        [boundaryLinks]="true"
+        [totalItems]="pagination.totalItems"
+        [itemsPerPage]="pagination.pageSize"
+        [(ngModel)]="pagination.currentPage"
+        (pageChanged)="pageChanged($event)"
+        previousText="&lsaquo;"
+        nextText="&rsaquo;"
+        firstText="&laquo;"
+        lastText="&raquo;"
+      >
+      </pagination>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<div class="auth-bg">
+  <div class="authentication-box">
+    <div class="text-center">
+      <img src="assets/images/logo/logo.svg" alt="site logo" height="70" />
+    </div>
+    <div class="card mt-4">
+      <div class="card-body">
+        <div class="text-center">
+          <h4>LOGIN</h4>
+          <h6>Enter your Email and Password</h6>
+        </div>
+        <form [formGroup]="loginForm" class="theme-form">
+          <div
+            *ngIf="loginForm.errors?.['server']"
+            class="alert alert-sm alert-danger"
+          >
+            {{ loginForm.errors?.['server'] }}
+          </div>
+          <div class="form-group">
+            <label class="col-form-label pt-0" for="signinEmail">Email</label>
+            <input
+              id="signinEmail"
+              type="email"
+              class="form-control"
+              [class.is-invalid]="email | isInvalid"
+              formControlName="email"
+            />
+            <div class="invalid-feedback">
+              <div *ngIf="email | hasError: 'required'">Email is required</div>
+              <div *ngIf="email | hasError: 'email'">
+                Email format is not valid
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label" for="signinPassword">Password</label>
+            <input
+              id="signinPassword"
+              type="password"
+              class="form-control"
+              [class.is-invalid]="password | isInvalid"
+              formControlName="password"
+            />
+            <div class="invalid-feedback">
+              <div *ngIf="password | hasError: 'required'">
+                Password is required
+              </div>
+            </div>
+          </div>
+          <small class="form-text text-muted">
+            <a routerLink="/auth/forget-password">Forgot password?</a>
+          </small>
+          <div class="form-group form-row mt-3 mb-0">
+            <button
+              class="btn btn-primary btn-block"
+              type="submit"
+              [class.spinner]="loginInProgress"
+              (click)="login()"
+            >
+              <span>Login</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

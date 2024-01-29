@@ -1,0 +1,106 @@
+<!-- Page Header Start-->
+<div
+  class="page-main-header"
+  [ngClass]="{ open: navServices.collapseSidebar }"
+  id="page-main-header"
+>
+  <div class="main-header-right">
+    <div class="main-header-left d-lg-none">
+      <div class="logo-wrapper">
+        <a href="javascript:void(0)"
+          ><img src="assets/images/logo/logo.svg" alt="" height="20"
+        /></a>
+      </div>
+    </div>
+    <div class="mobile-sidebar">
+      <div class="media-body text-right switch-sm">
+        <label class="switch">
+          <a href="javascript:void(0)" (click)="collapseSidebar()">
+            <i class="fa fa fa-bars" aria-hidden="true"></i
+          ></a>
+        </label>
+      </div>
+    </div>
+    <div class="d-lg-none nav-right col-4 ml-40">
+      <a class="middle" (click)="logout()">
+        <span class="p-l-5 f-16"
+          ><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</span
+        >
+      </a>
+    </div>
+    <div class="nav-right col">
+      <ul class="nav-menus" [ngClass]="{ open: openNav }">
+        <li>
+          <form class="form-inline search-form">
+            <div class="form-group">
+              <input
+                class="form-control-plaintext"
+                [class.open]="isOpenMobile"
+                [(ngModel)]="text"
+                [ngModelOptions]="{ standalone: true }"
+                (keyup)="searchTerm(text)"
+                type="text"
+                autocomplete="off"
+                placeholder="Search.."
+              />
+              <span class="d-sm-none mobile-search"> </span>
+              <div
+                class="Typeahead-menu"
+                [class.is-open]="searchResult"
+                *ngIf="menuItems?.length"
+                id="search-outer"
+              >
+                <div
+                  class="ProfileCard u-cf"
+                  *ngFor="let menuItem of menuItems | slice: 0:8"
+                >
+                  <div class="ProfileCard-avatar"></div>
+                  <div class="ProfileCard-details">
+                    <div class="ProfileCard-realName">
+                      <a
+                        [routerLink]="menuItem?.path"
+                        class="realname"
+                        (click)="removeFix()"
+                        >{{ menuItem?.title }}</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="Typeahead-menu" [class.is-open]="searchResultEmpty">
+                <div class="tt-dataset tt-dataset-0">
+                  <div class="EmptyMessage">
+                    Opps!! There are no result found.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <a
+            href="javascript:void(0)"
+            class="text-dark"
+            (click)="toggleFullScreen()"
+          >
+            <i class="fa fa-window-maximize fa" aria-hidden="true"></i>
+          </a>
+        </li>
+        <li class="onhover-dropdown">
+          <div class="media align-items-center">
+            <a class="middle" (click)="logout()">
+              <span class="p-l-5 f-16"
+                ><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</span
+              >
+            </a>
+          </div>
+        </li>
+      </ul>
+      <div
+        class="d-lg-none mobile-toggle pull-right"
+        (click)="openMobileNav()"
+      ></div>
+    </div>
+  </div>
+</div>
+<!-- Page Header Ends -->
