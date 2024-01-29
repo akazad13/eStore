@@ -6,6 +6,7 @@ using Exino.Application.Common.Utilities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 
 namespace Exino.Application
@@ -15,8 +16,11 @@ namespace Exino.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
+            services.AddMediatR(options =>
+            {
+                options.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+            });
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));

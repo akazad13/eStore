@@ -24,7 +24,6 @@ namespace Exino.Application.CQRS.Category.Commands.CreateCategory
         )
         {
             var model = _mapper.Map<Domain.Entities.Category>(request);
-            model.Status = Status.Active;
 
             await _categoryRepository.Create(model);
 

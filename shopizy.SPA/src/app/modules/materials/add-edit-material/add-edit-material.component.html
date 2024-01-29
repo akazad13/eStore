@@ -1,0 +1,95 @@
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="addEditMaterialForm" class="theme-form">
+            <div
+              *ngIf="addEditMaterialForm.errors?.['server']"
+              class="alert alert-sm alert-danger"
+            >
+              {{ addEditMaterialForm.errors?.['server'] }}
+            </div>
+            <div class="row">
+              <div class="form-group col-12">
+                <label class="col-form-label" for="name">Material Name</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name | isInvalid"
+                  [maxLength]="50"
+                />
+                <div class="invalid-feedback">
+                  <div *ngIf="name | hasError: 'required'">
+                    Material name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <div class="form-group">
+                  <label class="col-form-label" for="productImages"
+                    >Material Image</label
+                  >
+                  <input
+                    id="productImages"
+                    class="form-control"
+                    type="file"
+                    accept="image/*"
+                    (change)="onChange($event)"
+                  />
+                  <div class="row pb-2" *ngIf="url != ''">
+                    <div class="col-md-3">
+                      <div class="card mt-4">
+                        <div class="card-body text-center">
+                          <img
+                            class="image img-thumbnail"
+                            [src]="url"
+                            style="height: 200px"
+                          />
+                        </div>
+                        <div class="card-footer text-center">
+                          <button
+                            type="button"
+                            class="btn btn-danger"
+                            (click)="removeImage()"
+                          >
+                            <i class="fa fa-times"></i>
+                            RemovePicture
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer text-center">
+          <div class="row pt-4">
+            <div class="col-12">
+              <button
+                class="btn btn-primary btn-block"
+                type="submit"
+                [class.spinner]="saveInProgress"
+                (click)="saveMaterial()"
+              >
+                <span>Save</span>
+              </button>
+              <button
+                class="btn btn-danger btn-block margin-left-10"
+                type="button"
+                (click)="back()"
+              >
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

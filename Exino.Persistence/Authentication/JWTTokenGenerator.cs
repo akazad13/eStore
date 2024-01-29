@@ -25,7 +25,7 @@ namespace Exino.Persistence.Authentication
 
         public async Task<string> GenerateJwtToken(AppUser user)
         {
-            var signingKey = Convert.FromBase64String(_configModel.Jwt.SigningSecret);
+            var signingKey = Convert.FromBase64String(_configModel?.Jwt?.SigningSecret ?? "");
             var expiryDuration = _configModel.Jwt.ExpiryDuration ?? 120;
             var validIssuer = _configModel.Jwt.ValidIssuer;
             var validAudience = _configModel.Jwt.ValidAudience;
