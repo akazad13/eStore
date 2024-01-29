@@ -1,4 +1,4 @@
-namespace Exino.Domain.Paging
+namespace eStore.Domain.Paging
 {
     public class Paginate<T> : IPaginate<T>
     {
@@ -12,8 +12,8 @@ namespace Exino.Domain.Paging
                 TotalItems = count
             };
             this.Items = items;
-
         }
+
         public Pagination Pagination { get; set; }
         public IList<T> Items { get; set; }
     }

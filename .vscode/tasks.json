@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Exino.API/Exino.API.csproj",
+                "${workspaceFolder}/eStore.API/eStore.API.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Exino.API/Exino.API.csproj",
+                "${workspaceFolder}/eStore.API/eStore.API.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Exino.API/Exino.API.csproj"
+                "${workspaceFolder}/eStore.API/eStore.API.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

@@ -1,12 +1,16 @@
-﻿using Exino.Domain.Paging;
+﻿using eStore.Domain.Paging;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Persistence.Paging
 {
     public static class IQueryablePaginateExtensions
     {
-        public static async Task<IPaginate<T>> ToPaginateAsync<T>(this IQueryable<T> source, int pageNumber, int pageSize,
-                                                              CancellationToken cancellationToken = default)
+        public static async Task<IPaginate<T>> ToPaginateAsync<T>(
+            this IQueryable<T> source,
+            int pageNumber,
+            int pageSize,
+            CancellationToken cancellationToken = default
+        )
         {
             var count = await source.CountAsync();
             List<T> item;

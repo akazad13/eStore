@@ -1,4 +1,4 @@
-using Exino.Domain.Paging;
+using eStore.Domain.Paging;
 
 public interface IPaginate<T>
 {
