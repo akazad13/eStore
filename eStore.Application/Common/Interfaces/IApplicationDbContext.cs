@@ -1,5 +1,4 @@
-﻿using eStore.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace eStore.Application.Common.Interfaces
 {

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using eStore.Application.Common.Wrappers;
+﻿using eStore.Application.Common.Wrappers;
 using eStore.Application.RepositoriesInterface;
 using eStore.Domain.Enums;
 using MediatR;
@@ -7,24 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eStore.Application.CQRS.Product.Queries.GetAllProduct
 {
-    public class GetAllProductQueryHandler
-        : IRequestHandler<GetAllProductQueryRequest, IResult<IPaginate<GetAllProductQueryResponse>>>
+    public class GetAllProductQueryHandler(IProductRepository productRepository)
+                : IRequestHandler<GetAllProductQueryRequest, IResult<IPaginate<GetAllProductQueryResponse>>>
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
-
-        public GetAllProductQueryHandler(IProductRepository productRepository, IMapper mapper)
-        {
-            _productRepository = productRepository;
-            _mapper = mapper;
-        }
-
         public async Task<IResult<IPaginate<GetAllProductQueryResponse>>> Handle(
             GetAllProductQueryRequest request,
             CancellationToken cancellationToken
         )
         {
-            var products = await _productRepository.GetFilteredList(
+            var products = await productRepository.GetFilteredList(
                 selector: x =>
                     new GetAllProductQueryResponse
                     {
@@ -38,11 +28,10 @@ namespace eStore.Application.CQRS.Product.Queries.GetAllProduct
                             x.ProductImages == null
                                 ? null
                                 : (
-                                    x.ProductImages.Count(p => p.IsThumbnail == true) > 0
-                                        ? null
-                                        : x.ProductImages
+                                    x.ProductImages!.Any(p => p.IsThumbnail == true) ?
+                                        x.ProductImages!
                                             .First(p => p.IsThumbnail == true)
-                                            .ImagePath
+                                            !.ImagePath : null
                                 ),
                         Stock = x.Stock,
                         CategoryName = x.Category == null ? null : x.Category.Name

@@ -5,7 +5,7 @@ namespace eStore.Application.CQRS.Authentication.Queries.Login
 {
     public class UserLoginQueryRequest : IRequest<IResult<UserLoginQueryResponse>>
     {
-        public string? Email { get; set; }
-        public string? Password { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
     }
 }

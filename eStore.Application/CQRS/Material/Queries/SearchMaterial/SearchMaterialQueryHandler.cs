@@ -7,33 +7,20 @@ using MediatR;
 
 namespace eStore.Application.CQRS.Material.Queries.SearchMaterial
 {
-    public class SearchMaterialQueryHandler
-        : IRequestHandler<
+    public class SearchMaterialQueryHandler(
+        IMaterialRepository materialRepository
+        )
+                : IRequestHandler<
             SearchMaterialQueryRequest,
             IResult<IPaginate<SearchMaterialQueryResponse>>
         >
     {
-        private readonly IMaterialRepository _materialRepository;
-        private readonly IMapper _mapper;
-        private readonly IHelper _helper;
-
-        public SearchMaterialQueryHandler(
-            IMaterialRepository materialRepository,
-            IMapper mapper,
-            IHelper helper
-        )
-        {
-            _materialRepository = materialRepository;
-            _mapper = mapper;
-            _helper = helper;
-        }
-
         public async Task<IResult<IPaginate<SearchMaterialQueryResponse>>> Handle(
             SearchMaterialQueryRequest request,
             CancellationToken cancellationToken
         )
         {
-            var products = await _materialRepository.GetFilteredList(
+            var products = await materialRepository.GetFilteredList(
                 selector: x =>
                     new SearchMaterialQueryResponse
                     {

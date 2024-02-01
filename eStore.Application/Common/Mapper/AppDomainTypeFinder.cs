@@ -29,16 +29,6 @@ namespace eStore.Application.Common.Mapper
             return FindClassesOfType(assignTypeFrom, GetAssemblies(), onlyConcreteClasses);
         }
 
-        public virtual IList<Assembly> GetAssemblies()
-        {
-            var addedAssemblyNames = new List<string>();
-            var assemblies = new List<Assembly>();
-
-            AddAssembliesInAppDomain(addedAssemblyNames, assemblies);
-
-            return assemblies;
-        }
-
         public IEnumerable<Type> FindClassesOfType(
             Type assignTypeFrom,
             IEnumerable<Assembly> assemblies,
@@ -50,12 +40,15 @@ namespace eStore.Application.Common.Mapper
             {
                 foreach (var a in assemblies)
                 {
-                    Type[] types = null;
+                    Type[]? types = null;
                     try
                     {
                         types = a.GetTypes();
                     }
-                    catch { }
+                    catch
+                    {
+                        //ignored
+                    }
 
                     if (types == null)
                         continue;
@@ -86,10 +79,20 @@ namespace eStore.Application.Common.Mapper
             {
                 var msg = string.Empty;
                 foreach (var e in ex.LoaderExceptions)
-                    msg += e.Message + Environment.NewLine;
+                    msg = $"{msg}{e?.Message}{Environment.NewLine}";
             }
 
             return result;
+        }
+
+        public virtual IList<Assembly> GetAssemblies()
+        {
+            var addedAssemblyNames = new List<string>();
+            var assemblies = new List<Assembly>();
+
+            AddAssembliesInAppDomain(addedAssemblyNames, assemblies);
+
+            return assemblies;
         }
 
         #region Private Methods
@@ -101,11 +104,11 @@ namespace eStore.Application.Common.Mapper
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                if (addedAssemblyNames.Contains(assembly.FullName))
+                if (addedAssemblyNames.Contains(assembly.FullName ?? ""))
                     continue;
 
                 assemblies.Add(assembly);
-                addedAssemblyNames.Add(assembly.FullName);
+                addedAssemblyNames.Add(assembly.FullName ?? "");
             }
         }
 

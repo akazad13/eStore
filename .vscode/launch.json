@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/eStore.API/bin/Debug/net6.0/eStore.API.dll",
+            "program": "${workspaceFolder}/eStore.API/bin/Debug/net8.0/eStore.API.dll",
             "args": [],
             "cwd": "${workspaceFolder}/eStore.API",
             "stopAtEntry": false,

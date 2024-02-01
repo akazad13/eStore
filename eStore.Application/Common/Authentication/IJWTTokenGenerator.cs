@@ -2,7 +2,7 @@
 
 namespace eStore.Application.Common.Authentication
 {
-    public interface IJWTTokenGenerator
+    public interface IJwtTokenGenerator
     {
         Task<string> GenerateJwtToken(AppUser user);
     }

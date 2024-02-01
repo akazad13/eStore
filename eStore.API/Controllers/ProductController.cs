@@ -14,18 +14,18 @@ namespace eStore.API.Controllers
             return (await Mediator.Send(request)).Match<IActionResult>(Ok, BadRequest);
         }
 
-        [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] SearchProductQueryRequest request)
-        {
-            return (await Mediator.Send(request)).Match<IActionResult>(Ok, BadRequest);
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             return (
                 await Mediator.Send(new GetProductByIdQueryRequest() { Id = id })
             ).Match<IActionResult>(Ok, BadRequest);
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] SearchProductQueryRequest request)
+        {
+            return (await Mediator.Send(request)).Match<IActionResult>(Ok, BadRequest);
         }
 
         [HttpPost]

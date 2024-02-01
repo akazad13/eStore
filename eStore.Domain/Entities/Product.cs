@@ -13,7 +13,7 @@ namespace eStore.Domain.Entities
         public string? SKU { get; set; }
         public int Stock { get; set; }
         public int CategoryId { get; set; }
-        public Category? Category { get; set; }
+        public required Category Category { get; set; }
         public int MaterialId { get; set; }
         public Material? Material { get; set; }
         public ICollection<OrderDetail>? OrdeDetails { get; set; }

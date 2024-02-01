@@ -6,40 +6,31 @@ using MediatR;
 
 namespace eStore.Application.CQRS.Authentication.Queries.Login
 {
-    public class UserLoginQueryHandler
-        : IRequestHandler<UserLoginQueryRequest, IResult<UserLoginQueryResponse>>
-    {
-        private readonly IIdentityService _identityService;
-        private readonly IJWTTokenGenerator _IJWTTokenGenerator;
-        private readonly IMapper _mapper;
-
-        public UserLoginQueryHandler(
-            IIdentityService identityService,
-            IJWTTokenGenerator IJWTTokenGenerator,
-            IMapper mapper
+    public class UserLoginQueryHandler(
+        IIdentityService identityService,
+        IJwtTokenGenerator IJwtTokenGenerator,
+        IMapper mapper
         )
-        {
-            _identityService = identityService;
-            _IJWTTokenGenerator = IJWTTokenGenerator;
-            _mapper = mapper;
-        }
+                : IRequestHandler<UserLoginQueryRequest, IResult<UserLoginQueryResponse>>
+    {
+        private readonly IJwtTokenGenerator _IJwtTokenGenerator = IJwtTokenGenerator;
 
         public async Task<IResult<UserLoginQueryResponse>> Handle(
             UserLoginQueryRequest request,
             CancellationToken cancellationToken
         )
         {
-            var user = await _identityService.AuthenticateUser(request.Email, request.Password);
+            var user = await identityService.AuthenticateUser(request.Email, request.Password);
 
             if (user == null)
             {
                 return Response<UserLoginQueryResponse>.ErrorResponse(
-                    new string[] { $"Invalid Credentials for '{request.Email}'." }
+                    [$"Invalid Credentials for '{request.Email}'."]
                 );
             }
 
-            var response = _mapper.Map<UserLoginQueryResponse>(user);
-            response.JWT = await _IJWTTokenGenerator.GenerateJwtToken(user);
+            var response = mapper.Map<UserLoginQueryResponse>(user);
+            response.JWT = await _IJwtTokenGenerator.GenerateJwtToken(user);
 
             return Response<UserLoginQueryResponse>.SuccessResponese(response);
         }

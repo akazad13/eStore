@@ -5,27 +5,18 @@ using MediatR;
 
 namespace eStore.Application.CQRS.Category.Commands.UpdateCategory
 {
-    public class UpdateCategoryCommandHandler
-        : IRequestHandler<UpdateCategoryCommandRequest, IResult<GenericResponse>>
+    public class UpdateCategoryCommandHandler(ICategoryRepository categoryRepository, IMapper mapper)
+                : IRequestHandler<UpdateCategoryCommandRequest, IResult<GenericResponse>>
     {
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
-
-        public UpdateCategoryCommandHandler(ICategoryRepository categoryRepository, IMapper mapper)
-        {
-            _categoryRepository = categoryRepository;
-            _mapper = mapper;
-        }
-
         public async Task<IResult<GenericResponse>> Handle(
             UpdateCategoryCommandRequest request,
             CancellationToken cancellationToken
         )
         {
-            var model = _mapper.Map<Domain.Entities.Category>(request);
+            var model = mapper.Map<Domain.Entities.Category>(request);
 
-            await _categoryRepository.Create(model);
-            var result = await _categoryRepository.Commit(cancellationToken);
+            await categoryRepository.Create(model);
+            var result = await categoryRepository.Commit(cancellationToken);
 
             if (result)
             {
@@ -34,7 +25,7 @@ namespace eStore.Application.CQRS.Category.Commands.UpdateCategory
             else
             {
                 return Response<GenericResponse>.ErrorResponse(
-                    new[] { "Failed to save the category" }
+                    ["Failed to save the category"]
                 );
             }
         }

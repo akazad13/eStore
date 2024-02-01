@@ -9,12 +9,12 @@ using System.Security.Claims;
 
 namespace eStore.Persistence.Authentication
 {
-    public class JWTTokenGenerator : IJWTTokenGenerator
+    public class JwtTokenGenerator : IJwtTokenGenerator
     {
         private readonly ConfigModel _configModel;
         private readonly IIdentityService _identityService;
 
-        public JWTTokenGenerator(
+        public JwtTokenGenerator(
             IOptions<ConfigModel> configModel,
             IIdentityService identityService
         )
@@ -25,8 +25,8 @@ namespace eStore.Persistence.Authentication
 
         public async Task<string> GenerateJwtToken(AppUser user)
         {
-            var signingKey = Convert.FromBase64String(_configModel?.Jwt?.SigningSecret ?? "");
-            var expiryDuration = _configModel.Jwt.ExpiryDuration ?? 120;
+            var signingKey = Convert.FromBase64String(_configModel.Jwt.SigningSecret);
+            var expiryDuration = _configModel.Jwt.ExpiryDuration;
             var validIssuer = _configModel.Jwt.ValidIssuer;
             var validAudience = _configModel.Jwt.ValidAudience;
 

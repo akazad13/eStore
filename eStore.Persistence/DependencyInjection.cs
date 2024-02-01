@@ -57,7 +57,7 @@ namespace eStore.Persistence
                 .AddRoleValidator<RoleValidator<Role>>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
 

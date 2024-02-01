@@ -1,29 +1,19 @@
-﻿using AutoMapper;
-using eStore.Application.Common.Wrappers;
+﻿using eStore.Application.Common.Wrappers;
 using eStore.Application.RepositoriesInterface;
 using eStore.Domain.Enums;
 using MediatR;
 
 namespace eStore.Application.CQRS.Material.Queries.GetMaterialById
 {
-    public class GetMaterialByIdQueryHandler
-        : IRequestHandler<GetMaterialByIdQueryRequest, IResult<GetMaterialByIdQueryResponse>>
+    public class GetMaterialByIdQueryHandler(IMaterialRepository materialRepository)
+                : IRequestHandler<GetMaterialByIdQueryRequest, IResult<GetMaterialByIdQueryResponse>>
     {
-        private readonly IMaterialRepository _materialRepository;
-        private readonly IMapper _mapper;
-
-        public GetMaterialByIdQueryHandler(IMaterialRepository materialRepository, IMapper mapper)
-        {
-            _materialRepository = materialRepository;
-            _mapper = mapper;
-        }
-
         public async Task<IResult<GetMaterialByIdQueryResponse>> Handle(
             GetMaterialByIdQueryRequest request,
             CancellationToken cancellationToken
         )
         {
-            var material = await _materialRepository.GetFilteredFirstOrDefault(
+            var material = await materialRepository.GetFilteredFirstOrDefault(
                 selector: x =>
                     new GetMaterialByIdQueryResponse
                     {
@@ -33,7 +23,7 @@ namespace eStore.Application.CQRS.Material.Queries.GetMaterialById
                     },
                 expression: x => x.Id == request.Id && x.Status != Status.Deactive
             );
-            return Response<GetMaterialByIdQueryResponse>.SuccessResponese(material);
+            return Response<GetMaterialByIdQueryResponse>.SuccessResponese(material?? new GetMaterialByIdQueryResponse());
         }
     }
 }

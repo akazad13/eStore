@@ -41,7 +41,9 @@ namespace eStore.API
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    var signingKey = Convert.FromBase64String(configuration["Jwt:SigningSecret"]);
+                    var signingKey = Convert.FromBase64String(
+                        configuration["Jwt:SigningSecret"] ?? ""
+                    );
                     var validIssuer = configuration["Jwt:ValidIssuer"];
                     var validAudience = configuration["Jwt:ValidAudience"];
                     options.TokenValidationParameters = new TokenValidationParameters

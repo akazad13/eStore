@@ -6,7 +6,6 @@ using eStore.Application.Common.Utilities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System.Reflection;
 
 namespace eStore.Application
@@ -29,7 +28,7 @@ namespace eStore.Application
 
             //Add helper and other services
             services.AddScoped<IHelper, Helper>();
-            services.AddScoped<IAWSS3Service, AWSS3Service>();
+            services.AddScoped<IAwsS3Service, AwsS3Service>();
 
             return services;
         }
@@ -37,28 +36,28 @@ namespace eStore.Application
         private static IMapper AddAutoMapper(ITypeFinder typeFinder)
         {
             var mapperConfigurations = typeFinder.FindClassesOfType<IOrderedMapperProfile>();
-
-            //create and sort instances of mapper configurations
-            var instances = mapperConfigurations
-                .Select(
-                    mapperConfiguration =>
-                        (IOrderedMapperProfile)Activator.CreateInstance(mapperConfiguration)
-                )
-                .OrderBy(mapperConfiguration => mapperConfiguration.Order);
-
-            //create AutoMapper configuration
-            var config = new MapperConfiguration(cfg =>
+            if (mapperConfigurations != null)
             {
-                foreach (var instance in instances)
+                //create and sort instances of mapper configurations
+                var instances = mapperConfigurations
+                    .Select(
+                        mapperConfiguration =>
+                            (IOrderedMapperProfile)Activator.CreateInstance(mapperConfiguration)!
+                    )
+                    .OrderBy(mapperConfiguration => mapperConfiguration!.Order);
+
+                //create AutoMapper configuration
+                var config = new MapperConfiguration(cfg =>
                 {
-                    cfg.AddProfile(instance.GetType());
-                }
-            });
-
-            //register
-            AutoMapperConfiguration.Init(config);
-
-            return AutoMapperConfiguration.Mapper;
+                    foreach (var instance in instances)
+                    {
+                        cfg.AddProfile(instance!.GetType());
+                    }
+                });
+                //register
+                AutoMapperConfiguration.Init(config);
+            }
+            return AutoMapperConfiguration.Mapper!;
         }
     }
 }

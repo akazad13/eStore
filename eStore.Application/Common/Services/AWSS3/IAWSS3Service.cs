@@ -1,8 +1,6 @@
-﻿using Amazon.S3;
-
-namespace eStore.Application.Common.Services.AWSS3
+﻿namespace eStore.Application.Common.Services.AWSS3
 {
-    public interface IAWSS3Service
+    public interface IAwsS3Service
     {
         Task<bool> CheckFileExistInFolderS3(string filename);
         Task<bool> DeleteFileS3(string filename);

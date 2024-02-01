@@ -8,8 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eStore.Persistence.DbContext
 {
-    public class ApplicationDbContext
-        : IdentityDbContext<
+    public class ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options,
+        IMediator mediator,
+        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor
+        )
+                : IdentityDbContext<
             AppUser,
             Role,
             long,
@@ -18,22 +22,9 @@ namespace eStore.Persistence.DbContext
             IdentityUserLogin<long>,
             IdentityRoleClaim<long>,
             IdentityUserToken<long>
-        >,
+        >(options),
             IApplicationDbContext
     {
-        private readonly IMediator _mediator;
-        private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-
-        public ApplicationDbContext(
-            DbContextOptions<ApplicationDbContext> options,
-            IMediator mediator,
-            AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor
-        ) : base(options)
-        {
-            _mediator = mediator;
-            _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-        }
-
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
@@ -244,7 +235,7 @@ namespace eStore.Persistence.DbContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+            optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
         }
 
         public DbSet<T> GetDbSet<T>() where T : class
@@ -256,7 +247,7 @@ namespace eStore.Persistence.DbContext
             CancellationToken cancellationToken = default
         )
         {
-            await _mediator.DispatchDomainEvents(this);
+            await mediator.DispatchDomainEvents(this);
 
             return await base.SaveChangesAsync(cancellationToken);
         }

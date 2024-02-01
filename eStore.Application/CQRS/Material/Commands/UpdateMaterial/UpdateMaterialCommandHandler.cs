@@ -6,23 +6,14 @@ using MediatR;
 
 namespace eStore.Application.CQRS.Material.Commands.UpdateMaterial
 {
-    public class UpdateMaterialCommandHandler
-        : IRequestHandler<UpdateMaterialCommandRequest, IResult<GenericResponse>>
-    {
-        private readonly IMaterialRepository _materialRepository;
-        private readonly IMapper _mapper;
-        private readonly IAWSS3Service _AWSS3Service;
-
-        public UpdateMaterialCommandHandler(
-            IMaterialRepository materialRepository,
-            IMapper mapper,
-            IAWSS3Service AWSS3Service
+    public class UpdateMaterialCommandHandler(
+        IMaterialRepository materialRepository,
+        IMapper mapper,
+        IAwsS3Service AWSS3Service
         )
-        {
-            _materialRepository = materialRepository;
-            _mapper = mapper;
-            _AWSS3Service = AWSS3Service;
-        }
+                : IRequestHandler<UpdateMaterialCommandRequest, IResult<GenericResponse>>
+    {
+        private readonly IAwsS3Service _AWSS3Service = AWSS3Service;
 
         public async Task<IResult<GenericResponse>> Handle(
             UpdateMaterialCommandRequest request,
@@ -31,27 +22,25 @@ namespace eStore.Application.CQRS.Material.Commands.UpdateMaterial
         {
             try
             {
-                var model = _mapper.Map<Domain.Entities.Material>(request);
+                var model = mapper.Map<Domain.Entities.Material>(request);
 
                 if (request.MaterialImage != null)
                 {
                     var filename = $"mat_{Guid.NewGuid().ToString()}";
-                    using (var newMemoryStream = new MemoryStream())
+                    using var newMemoryStream = new MemoryStream();
+                    request.MaterialImage.CopyTo(newMemoryStream);
+                    var isUploaded = await _AWSS3Service.PushToAmazonS3ViaRest(
+                        filename,
+                        newMemoryStream
+                    );
+                    if (isUploaded)
                     {
-                        request.MaterialImage.CopyTo(newMemoryStream);
-                        var isUploaded = await _AWSS3Service.PushToAmazonS3ViaRest(
-                            filename,
-                            newMemoryStream
-                        );
-                        if (isUploaded)
-                        {
-                            model.MaterialImagePath = filename;
-                        }
+                        model.MaterialImagePath = filename;
                     }
                 }
 
-                _materialRepository.Update(model);
-                var result = await _materialRepository.Commit(cancellationToken);
+                materialRepository.Update(model);
+                var result = await materialRepository.Commit(cancellationToken);
 
                 if (result)
                 {
@@ -62,14 +51,14 @@ namespace eStore.Application.CQRS.Material.Commands.UpdateMaterial
                 else
                 {
                     return Response<GenericResponse>.ErrorResponse(
-                        new[] { "Failed to save the material" }
+                        ["Failed to save the material"]
                     );
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Response<GenericResponse>.ErrorResponse(
-                    new[] { "Failed to save the material" }
+                    ["Failed to save the material"]
                 );
             }
         }

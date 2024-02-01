@@ -6,27 +6,18 @@ using MediatR;
 
 namespace eStore.Application.CQRS.Category.Queries.GetAllCategories
 {
-    public class GetAllCategoriesQueryHandler
-        : IRequestHandler<
+    public class GetAllCategoriesQueryHandler(ICategoryRepository categoryRepository)
+                : IRequestHandler<
             GetAllCategoriesQueryRequest,
             IResult<IPaginate<GetAllCategoriesQueryResponse>>
         >
     {
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
-
-        public GetAllCategoriesQueryHandler(ICategoryRepository categoryRepository, IMapper mapper)
-        {
-            _categoryRepository = categoryRepository;
-            _mapper = mapper;
-        }
-
         public async Task<IResult<IPaginate<GetAllCategoriesQueryResponse>>> Handle(
             GetAllCategoriesQueryRequest request,
             CancellationToken cancellationToken
         )
         {
-            var products = await _categoryRepository.GetFilteredList(
+            var products = await categoryRepository.GetFilteredList(
                 selector: x => new GetAllCategoriesQueryResponse { Id = x.Id, Name = x.Name, },
                 expression: x => x.Status != Status.Deactive,
                 orderBy: x => x.OrderBy(x => x.Name),

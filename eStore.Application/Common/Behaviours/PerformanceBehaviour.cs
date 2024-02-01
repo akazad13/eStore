@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace eStore.Application.Common.Behaviours
 {
-    public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class PerformanceBehaviour<TRequest, TResponse>(
+        ILogger<TRequest> logger,
+        ICurrentUserService currentUserService,
+        IIdentityService identityService
+        ) : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        private readonly Stopwatch _timer;
-        private readonly ILogger<TRequest> _logger;
-        private readonly ICurrentUserService _currentUserService;
-        private readonly IIdentityService _identityService;
-
-        public PerformanceBehaviour(
-            ILogger<TRequest> logger,
-            ICurrentUserService currentUserService,
-            IIdentityService identityService
-        )
-        {
-            _timer = new Stopwatch();
-
-            _logger = logger;
-            _currentUserService = currentUserService;
-            _identityService = identityService;
-        }
+        private readonly Stopwatch _timer = new Stopwatch();
+        private readonly ILogger<TRequest> _logger = logger;
+        private readonly ICurrentUserService _currentUserService = currentUserService;
+        private readonly IIdentityService _identityService = identityService;
 
         public async Task<TResponse> Handle(
             TRequest request,

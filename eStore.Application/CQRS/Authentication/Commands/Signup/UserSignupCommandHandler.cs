@@ -4,36 +4,29 @@ using MediatR;
 
 namespace eStore.Application.CQRS.Authentication.Commands.Signup
 {
-    public class UserSignupCommandHandler
-        : IRequestHandler<UserSignupCommandRequest, IResult<GenericResponse>>
+    public class UserSignupCommandHandler(IIdentityService identityService)
+                : IRequestHandler<UserSignupCommandRequest, IResult<GenericResponse>>
     {
-        private readonly IIdentityService _identityService;
-
-        public UserSignupCommandHandler(IIdentityService identityService)
-        {
-            _identityService = identityService;
-        }
-
         public async Task<IResult<GenericResponse>> Handle(
             UserSignupCommandRequest request,
             CancellationToken cancellationToken
         )
         {
-            var response = await _identityService.IsUserExist(request.Email);
-            if (response == true)
+            var response = await identityService.IsUserExist(request.Email);
+            if (response)
             {
                 return Response<GenericResponse>.ErrorResponse(
-                    new string[] { $"There is already an user registered with this email!." }
+                    [$"There is already an user registered with this email!."]
                 );
             }
 
-            var result = await _identityService.CreateUserAsync(
+            var result = await identityService.CreateUserAsync(
                 request.FirstName,
                 request.LastName,
                 request.Email,
                 request.Password,
                 request.IsSubscribeToNewsletter,
-                new[] { "Customer" }
+                [ "Customer" ]
             );
 
             if (result.Result.Succeeded)

@@ -5,24 +5,19 @@ using Microsoft.Extensions.Options;
 
 namespace eStore.Application.Common.Services.AWSS3
 {
-    public class AWSS3Service : IAWSS3Service
+    public class AwsS3Service(IOptions<ConfigModel> configModel) : IAwsS3Service
     {
-        private readonly ConfigModel _configModel;
-
-        public AWSS3Service(IOptions<ConfigModel> configModel)
-        {
-            _configModel = configModel.Value;
-        }
+        private readonly ConfigModel _configModel = configModel.Value;
 
         private AmazonS3Client InitializeS3()
         {
             var config = new AmazonS3Config
             {
-                ServiceURL = _configModel.AWS?.ServiceURL,
-                RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(_configModel.AWS?.Region)
+                ServiceURL = _configModel.Aws.ServiceURL,
+                RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(_configModel.Aws.Region)
             };
-            var publicKey = _configModel.AWS?.PublicKey;
-            var secretKey = _configModel.AWS?.SecretKey;
+            var publicKey = _configModel.Aws.PublicKey;
+            var secretKey = _configModel.Aws.SecretKey;
             AmazonS3Client s3Client = new(publicKey, secretKey, config);
             return s3Client;
         }
@@ -37,14 +32,12 @@ namespace eStore.Application.Common.Services.AWSS3
 
                 var putRequest = new PutObjectRequest()
                 {
-                    BucketName = _configModel.AWS?.ImageBucketName,
+                    BucketName = _configModel.Aws.ImageBucketName,
                     Key = fileNameToUpload,
                     InputStream = stream
                 };
 
-                PutObjectResponse response = await s3Client.PutObjectAsync(putRequest);
-
-                //return $"https://{_configModel.AWS?.ImageBucketName}.s3.{_configModel.AWS?.Region}.amazonaws.com/{fileNameToUpload}";
+                await s3Client.PutObjectAsync(putRequest);
                 return true;
             }
             catch (AmazonS3Exception awsEx)
@@ -66,14 +59,14 @@ namespace eStore.Application.Common.Services.AWSS3
                 bool Exist = await CheckFileExistInFolderS3(filename);
                 if (Exist)
                 {
-                    var S3BucketName = _configModel.AWS?.ImageBucketName;
+                    var S3BucketName = _configModel.Aws.ImageBucketName;
                     var Client = InitializeS3();
                     var Request = new DeleteObjectRequest()
                     {
                         BucketName = S3BucketName,
                         Key = filename
                     };
-                    DeleteObjectResponse response = await Client.DeleteObjectAsync(Request);
+                    await Client.DeleteObjectAsync(Request);
                     Client.Dispose();
                     return true;
                 }
@@ -82,7 +75,7 @@ namespace eStore.Application.Common.Services.AWSS3
                     return Exist;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -92,19 +85,18 @@ namespace eStore.Application.Common.Services.AWSS3
         {
             try
             {
-                var S3BucketName = _configModel.AWS?.ImageBucketName;
+                var S3BucketName = _configModel.Aws.ImageBucketName;
                 var Client = InitializeS3();
                 var Request = new GetObjectMetadataRequest()
                 {
                     BucketName = S3BucketName,
                     Key = filename,
                 };
-                GetObjectMetadataResponse response = await Client.GetObjectMetadataAsync(Request);
-                ///TODO: check the meta data response
+                await Client.GetObjectMetadataAsync(Request);
                 Client.Dispose();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -118,7 +110,7 @@ namespace eStore.Application.Common.Services.AWSS3
                 var Client = InitializeS3();
 
                 var expiryUrlRequest = new GetPreSignedUrlRequest();
-                expiryUrlRequest.BucketName = _configModel.AWS?.ImageBucketName;
+                expiryUrlRequest.BucketName = _configModel.Aws.ImageBucketName;
                 expiryUrlRequest.Key = fileNameToDownload;
                 expiryUrlRequest.Protocol = Amazon.S3.Protocol.HTTPS;
                 expiryUrlRequest.Verb = Amazon.S3.HttpVerb.GET;

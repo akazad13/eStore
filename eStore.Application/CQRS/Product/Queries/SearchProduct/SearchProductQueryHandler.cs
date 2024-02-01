@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using eStore.Application.Common.Utilities;
+﻿using eStore.Application.Common.Utilities;
 using eStore.Application.Common.Wrappers;
 using eStore.Application.RepositoriesInterface;
 using eStore.Domain.Enums;
@@ -8,30 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eStore.Application.CQRS.Product.Queries.SearchProduct
 {
-    public class SearchProductQueryHandler
-        : IRequestHandler<SearchProductQueryRequest, IResult<IPaginate<SearchProductQueryResponse>>>
+    public class SearchProductQueryHandler(IProductRepository productRepository, IHelper helper)
+                : IRequestHandler<SearchProductQueryRequest, IResult<IPaginate<SearchProductQueryResponse>>>
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
-        private readonly IHelper _helper;
-
-        public SearchProductQueryHandler(
-            IProductRepository productRepository,
-            IMapper mapper,
-            IHelper helper
-        )
-        {
-            _productRepository = productRepository;
-            _mapper = mapper;
-            _helper = helper;
-        }
-
         public async Task<IResult<IPaginate<SearchProductQueryResponse>>> Handle(
             SearchProductQueryRequest request,
             CancellationToken cancellationToken
         )
         {
-            var products = await _productRepository.GetFilteredList(
+            var products = await productRepository.GetFilteredList(
                 selector: x =>
                     new SearchProductQueryResponse
                     {
@@ -44,11 +28,10 @@ namespace eStore.Application.CQRS.Product.Queries.SearchProduct
                             x.ProductImages == null
                                 ? null
                                 : (
-                                    x.ProductImages.Count(p => p.IsThumbnail == true) > 0
-                                        ? null
-                                        : x.ProductImages
+                                    x.ProductImages.Any(p => p.IsThumbnail == true) ?
+                                        x.ProductImages
                                             .First(p => p.IsThumbnail == true)
-                                            .ImagePath
+                                            .ImagePath : ""
                                 ),
                         Stock = x.Stock,
                         CategoryName = x.Category == null ? null : x.Category.Name
@@ -58,13 +41,13 @@ namespace eStore.Application.CQRS.Product.Queries.SearchProduct
                     && (request.Name == null || (x.Name != null && x.Name.Contains(request.Name)))
                     && (
                         request.Categories == null
-                        || (_helper.SplitString(request.Categories)).Any(
+                        || (helper.SplitString(request.Categories)).Any(
                             c => c == x.CategoryId.ToString()
                         )
                     )
                     && (
                         request.Materials == null
-                        || _helper
+                        || helper
                             .SplitString(request.Materials)
                             .Any(m => m == x.MaterialId.ToString())
                     ),

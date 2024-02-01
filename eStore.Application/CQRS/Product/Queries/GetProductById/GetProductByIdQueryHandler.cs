@@ -4,32 +4,18 @@ using eStore.Application.CQRS.Product.Dtos;
 using eStore.Application.RepositoriesInterface;
 using eStore.Domain.Enums;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eStore.Application.CQRS.Product.Queries.GetProductById
 {
-    public class GetProductByIdQueryHandler
-        : IRequestHandler<GetProductByIdQueryRequest, IResult<GetProductByIdQueryResponse>>
+    public class GetProductByIdQueryHandler(IProductRepository productRepository)
+                : IRequestHandler<GetProductByIdQueryRequest, IResult<GetProductByIdQueryResponse>>
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
-
-        public GetProductByIdQueryHandler(IProductRepository productRepository, IMapper mapper)
-        {
-            _productRepository = productRepository;
-            _mapper = mapper;
-        }
-
         public async Task<IResult<GetProductByIdQueryResponse>> Handle(
             GetProductByIdQueryRequest request,
             CancellationToken cancellationToken
         )
         {
-            var product = await _productRepository.GetFilteredFirstOrDefault(
+            var product = await productRepository.GetFilteredFirstOrDefault(
                 selector: x =>
                     new GetProductByIdQueryResponse
                     {
@@ -80,7 +66,7 @@ namespace eStore.Application.CQRS.Product.Queries.GetProductById
                     },
                 expression: x => x.Id == request.Id && x.Status != Status.Deactive
             );
-            return Response<GetProductByIdQueryResponse>.SuccessResponese(product);
+            return Response<GetProductByIdQueryResponse>.SuccessResponese(product?? new GetProductByIdQueryResponse());
         }
     }
 }

@@ -14,7 +14,7 @@
 
         public static Result Success()
         {
-            return new Result(true, Array.Empty<string>());
+            return new Result(true, []);
         }
 
         public static Result Failure(IEnumerable<string> errors)
@@ -23,53 +23,39 @@
         }
     }
 
-    public class Success<T> : IResult<T>
+    public class Success<T>(T results) : IResult<T>
     {
-        private readonly T _results;
-
-        public Success(T results)
-        {
-            _results = results;
-        }
-
         public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<GenericResponse, TResult> _)
         {
-            return onSuccess(_results);
+            return onSuccess(results);
         }
 
         public IResult<TResult> Map<TResult>(Func<T, TResult> f)
         {
-            return new Success<TResult>(f(_results));
+            return new Success<TResult>(f(results));
         }
 
         public IResult<TResult> Bind<TResult>(Func<T, IResult<TResult>> f)
         {
-            return f(_results);
+            return f(results);
         }
     }
 
-    public class Error<T> : IResult<T>
+    public class Error<T>(GenericResponse error) : IResult<T>
     {
-        private readonly GenericResponse _error;
-
-        public Error(GenericResponse error)
-        {
-            _error = error;
-        }
-
         public TResult Match<TResult>(Func<T, TResult> _, Func<GenericResponse, TResult> onError)
         {
-            return onError(_error);
+            return onError(error);
         }
 
         public IResult<TResult> Map<TResult>(Func<T, TResult> _)
         {
-            return new Error<TResult>(_error);
+            return new Error<TResult>(error);
         }
 
         public IResult<TResult> Bind<TResult>(Func<T, IResult<TResult>> _)
         {
-            return new Error<TResult>(_error);
+            return new Error<TResult>(error);
         }
     }
 }

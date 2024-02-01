@@ -70,7 +70,7 @@ app.UseExceptionHandler(errorApp =>
                     new
                     {
                         message = "Error Occured!",
-                        errors = new string[] { ex?.InnerException?.Message ?? ex?.Message ?? "" }
+                        errors = new string[] { ex!.InnerException!.Message }
                     }
                 ),
                 Encoding.UTF8

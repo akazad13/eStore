@@ -6,23 +6,14 @@ using MediatR;
 
 namespace eStore.Application.CQRS.Material.Commands.CreateMaterial
 {
-    public class CreateMaterialCommandHandler
-        : IRequestHandler<CreateMaterialCommandRequest, IResult<GenericResponse>>
-    {
-        private readonly IMaterialRepository _materialRepository;
-        private readonly IMapper _mapper;
-        private readonly IAWSS3Service _AWSS3Service;
-
-        public CreateMaterialCommandHandler(
-            IMaterialRepository materialRepository,
-            IMapper mapper,
-            IAWSS3Service AWSS3Service
+    public class CreateMaterialCommandHandler(
+        IMaterialRepository materialRepository,
+        IMapper mapper,
+        IAwsS3Service AWSS3Service
         )
-        {
-            _materialRepository = materialRepository;
-            _mapper = mapper;
-            _AWSS3Service = AWSS3Service;
-        }
+                : IRequestHandler<CreateMaterialCommandRequest, IResult<GenericResponse>>
+    {
+        private readonly IAwsS3Service _AWSS3Service = AWSS3Service;
 
         public async Task<IResult<GenericResponse>> Handle(
             CreateMaterialCommandRequest request,
@@ -31,7 +22,7 @@ namespace eStore.Application.CQRS.Material.Commands.CreateMaterial
         {
             try
             {
-                var model = _mapper.Map<Domain.Entities.Material>(request);
+                var model = mapper.Map<Domain.Entities.Material>(request);
 
                 if (request.MaterialImage != null)
                 {
@@ -50,8 +41,8 @@ namespace eStore.Application.CQRS.Material.Commands.CreateMaterial
                     }
                 }
 
-                await _materialRepository.Create(model);
-                var result = await _materialRepository.Commit(cancellationToken);
+                await materialRepository.Create(model);
+                var result = await materialRepository.Commit(cancellationToken);
 
                 if (result)
                 {
@@ -62,14 +53,14 @@ namespace eStore.Application.CQRS.Material.Commands.CreateMaterial
                 else
                 {
                     return Response<GenericResponse>.ErrorResponse(
-                        new[] { "Failed to save the material" }
+                        ["Failed to save the material"]
                     );
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Response<GenericResponse>.ErrorResponse(
-                    new[] { "Failed to save the material" }
+                    ["Failed to save the material"]
                 );
             }
         }

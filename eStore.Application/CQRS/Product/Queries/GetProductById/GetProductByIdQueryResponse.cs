@@ -1,5 +1,4 @@
 ﻿using eStore.Application.CQRS.Product.Dtos;
-using eStore.Domain.Entities;
 
 namespace eStore.Application.CQRS.Product.Queries.GetProductById
 {

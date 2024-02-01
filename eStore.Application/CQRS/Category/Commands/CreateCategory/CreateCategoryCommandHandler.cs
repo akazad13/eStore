@@ -1,33 +1,23 @@
 ﻿using AutoMapper;
 using eStore.Application.Common.Wrappers;
 using eStore.Application.RepositoriesInterface;
-using eStore.Domain.Enums;
 using MediatR;
 
 namespace eStore.Application.CQRS.Category.Commands.CreateCategory
 {
-    public class CreateCategoryCommandHandler
-        : IRequestHandler<CreateCategoryCommandRequest, IResult<GenericResponse>>
+    public class CreateCategoryCommandHandler(ICategoryRepository categoryRepository, IMapper mapper)
+                : IRequestHandler<CreateCategoryCommandRequest, IResult<GenericResponse>>
     {
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
-
-        public CreateCategoryCommandHandler(ICategoryRepository categoryRepository, IMapper mapper)
-        {
-            _categoryRepository = categoryRepository;
-            _mapper = mapper;
-        }
-
         public async Task<IResult<GenericResponse>> Handle(
             CreateCategoryCommandRequest request,
             CancellationToken cancellationToken
         )
         {
-            var model = _mapper.Map<Domain.Entities.Category>(request);
+            var model = mapper.Map<Domain.Entities.Category>(request);
 
-            await _categoryRepository.Create(model);
+            await categoryRepository.Create(model);
 
-            var result = await _categoryRepository.Commit(cancellationToken);
+            var result = await categoryRepository.Commit(cancellationToken);
 
             if (result)
             {
@@ -36,7 +26,7 @@ namespace eStore.Application.CQRS.Category.Commands.CreateCategory
             else
             {
                 return Response<GenericResponse>.ErrorResponse(
-                    new[] { "Failed to save the category" }
+                    ["Failed to save the category"]
                 );
             }
         }
