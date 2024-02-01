@@ -6,7 +6,7 @@ namespace eStore.Application.Common.Utilities
 
         public string[] SplitString(string source)
         {
-            char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
+            char[] delimiterChars = [' ', ',', '.', ':', '\t'];
             return source.Split(delimiterChars);
         }
     }

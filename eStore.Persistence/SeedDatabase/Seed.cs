@@ -7,38 +7,25 @@ using Microsoft.Extensions.Logging;
 
 namespace eStore.Persistence.SeedDatabase
 {
-    public class Seed
-    {
-        private readonly ILogger<Seed> _logger;
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly RoleManager<Role> _roleManager;
-
-        public Seed(
-            ILogger<Seed> logger,
-            ApplicationDbContext context,
-            UserManager<AppUser> userManager,
-            RoleManager<Role> roleManager
+    public class Seed(
+        ILogger<Seed> logger,
+        ApplicationDbContext context,
+        UserManager<AppUser> userManager,
+        RoleManager<Role> roleManager
         )
-        {
-            _logger = logger;
-            _context = context;
-            _userManager = userManager;
-            _roleManager = roleManager;
-        }
-
+    {
         public async Task InitialiseAsync()
         {
             try
             {
-                if (_context.Database.IsSqlServer())
+                if (context.Database.IsSqlServer())
                 {
-                    await _context.Database.MigrateAsync();
+                    await context.Database.MigrateAsync();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while initialising the database.");
+                logger.LogError(ex, "An error occurred while initialising the database.");
                 throw;
             }
         }
@@ -51,14 +38,14 @@ namespace eStore.Persistence.SeedDatabase
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while seeding the database.");
+                logger.LogError(ex, "An error occurred while seeding the database.");
                 throw;
             }
         }
 
         public async Task TrySeedAsync()
         {
-            if (!await _userManager.Users.AnyAsync())
+            if (!await userManager.Users.AnyAsync())
             {
                 var roles = new List<Role>
                 {
@@ -84,7 +71,7 @@ namespace eStore.Persistence.SeedDatabase
 
                 foreach (var role in roles)
                 {
-                    await _roleManager.CreateAsync(role);
+                    await roleManager.CreateAsync(role);
                 }
 
                 var admin = new AppUser
@@ -98,10 +85,10 @@ namespace eStore.Persistence.SeedDatabase
                     Status = Status.Active
                 };
 
-                var result = await _userManager.CreateAsync(admin, "Password123");
+                var result = await userManager.CreateAsync(admin, "Password123");
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRolesAsync(admin, new[] { "Admin" });
+                    await userManager.AddToRolesAsync(admin, ["Admin"]);
                 }
             }
         }

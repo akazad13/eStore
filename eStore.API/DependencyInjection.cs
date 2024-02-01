@@ -160,7 +160,7 @@ namespace eStore.API
 
         private static string[] Origins()
         {
-            return new string[] { "http://localhost:4200" };
+            return ["http://localhost:4200"];
         }
     }
 }

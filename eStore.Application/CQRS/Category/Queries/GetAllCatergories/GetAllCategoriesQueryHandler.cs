@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using eStore.Application.Common.Wrappers;
+﻿using eStore.Application.Common.Wrappers;
 using eStore.Application.RepositoriesInterface;
 using eStore.Domain.Enums;
 using MediatR;

@@ -25,7 +25,7 @@
 
     public class Success<T>(T results) : IResult<T>
     {
-        public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<GenericResponse, TResult> _)
+        public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<GenericResponse, TResult> onError)
         {
             return onSuccess(results);
         }
@@ -43,17 +43,17 @@
 
     public class Error<T>(GenericResponse error) : IResult<T>
     {
-        public TResult Match<TResult>(Func<T, TResult> _, Func<GenericResponse, TResult> onError)
+        public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<GenericResponse, TResult> onError)
         {
             return onError(error);
         }
 
-        public IResult<TResult> Map<TResult>(Func<T, TResult> _)
+        public IResult<TResult> Map<TResult>(Func<T, TResult> f)
         {
             return new Error<TResult>(error);
         }
 
-        public IResult<TResult> Bind<TResult>(Func<T, IResult<TResult>> _)
+        public IResult<TResult> Bind<TResult>(Func<T, IResult<TResult>> f)
         {
             return new Error<TResult>(error);
         }

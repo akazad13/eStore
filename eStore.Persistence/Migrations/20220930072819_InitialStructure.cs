@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -881,7 +880,7 @@ namespace eStore.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserLogins_ProviderKey_LoginProvider",
                 table: "UserLogins",
-                columns: new[] { "ProviderKey", "LoginProvider" }
+                columns: ["ProviderKey", "LoginProvider"]
             );
 
             migrationBuilder.CreateIndex(

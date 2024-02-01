@@ -9,19 +9,12 @@ using System.Security.Claims;
 
 namespace eStore.Persistence.Authentication
 {
-    public class JwtTokenGenerator : IJwtTokenGenerator
+    public class JwtTokenGenerator(
+        IOptions<ConfigModel> configModel,
+        IIdentityService identityService
+        ) : IJwtTokenGenerator
     {
-        private readonly ConfigModel _configModel;
-        private readonly IIdentityService _identityService;
-
-        public JwtTokenGenerator(
-            IOptions<ConfigModel> configModel,
-            IIdentityService identityService
-        )
-        {
-            _configModel = configModel.Value;
-            _identityService = identityService;
-        }
+        private readonly ConfigModel _configModel = configModel.Value;
 
         public async Task<string> GenerateJwtToken(AppUser user)
         {
@@ -35,7 +28,7 @@ namespace eStore.Persistence.Authentication
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
-            var userRoles = await _identityService.GetUserRoles(user);
+            var userRoles = await identityService.GetUserRoles(user);
 
             foreach (var role in userRoles)
             {

@@ -4,8 +4,7 @@ using eStore.Domain.Entities;
 
 namespace eStore.Persistence.Repositories
 {
-    internal class ProductRepository : BaseRepository<Product>, IProductRepository
+    internal class ProductRepository(IApplicationDbContext appDbContext) : BaseRepository<Product>(appDbContext), IProductRepository
     {
-        public ProductRepository(IApplicationDbContext appDbContext) : base(appDbContext) { }
     }
 }

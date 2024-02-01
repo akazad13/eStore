@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace eStore.Application.Common.Wrappers
+﻿namespace eStore.Application.Common.Wrappers
 {
     public interface IResult<T>
     {

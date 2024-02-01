@@ -4,8 +4,7 @@ using eStore.Domain.Entities;
 
 namespace eStore.Persistence.Repositories
 {
-    public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
+    public class CategoryRepository(IApplicationDbContext appDbContext) : BaseRepository<Category>(appDbContext), ICategoryRepository
     {
-        public CategoryRepository(IApplicationDbContext appDbContext) : base(appDbContext) { }
     }
 }
