@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -6,8 +7,10 @@ import {
   Validators
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, finalize, firstValueFrom, takeUntil } from 'rxjs';
+import { IAuthApi } from 'src/app/api';
 import { mustMatchValidator } from 'src/app/shared/functions/must-match';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -23,7 +26,8 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private authApi: IAuthApi,
+    private authService: AuthService
   ) {}
 
   get password() {
@@ -46,7 +50,7 @@ export class ResetPasswordComponent implements OnInit {
       { validators: [mustMatchValidator('password', 'confirmPassword')] }
     );
   }
-  reset(): void {
+  async reset(): Promise<void> {
     this.resetForm.markAllAsTouched();
 
     if (this.resetInProgress || this.resetForm.invalid) {
@@ -55,25 +59,29 @@ export class ResetPasswordComponent implements OnInit {
 
     this.resetInProgress = true;
 
-    // this.account
-    //   .resetPassword(this.resetForm.value.password, this.resetToken)
-    //   .pipe(
-    //     finalize(() => (this.resetInProgress = false)),
-    //     takeUntil(this.destroy$)
-    //   )
-    //   .subscribe(
-    //     (response: any) => {
-    //       this.successResponse = response.message;
-    //     },
-    //     (error) => {
-    //       if (error instanceof HttpErrorResponse) {
-    //         this.resetForm.setErrors({
-    //           server: error.error.message
-    //         });
-    //       } else {
-    //         alert(error);
-    //       }
-    //     }
-    //   );
+    try {
+      await firstValueFrom(
+        this.authApi
+          .resetPassword(
+            this.authService.getCurrentUserId(),
+            this.resetForm.value.password,
+            this.resetToken
+          )
+          .pipe(
+            finalize(() => (this.resetInProgress = false)),
+            takeUntil(this.destroy$)
+          )
+      ).then((response: any) => {
+        this.successResponse = response.message;
+      });
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        this.resetForm.setErrors({
+          server: error.error.message
+        });
+      } else {
+        alert(error);
+      }
+    }
   }
 }
