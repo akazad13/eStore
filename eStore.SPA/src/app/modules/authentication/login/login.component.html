@@ -26,8 +26,8 @@
               formControlName="email"
             />
             <div class="invalid-feedback">
-              <div *ngIf="email | hasError: 'required'">Email is required</div>
-              <div *ngIf="email | hasError: 'email'">
+              <div *ngIf="email | hasError : 'required'">Email is required</div>
+              <div *ngIf="email | hasError : 'email'">
                 Email format is not valid
               </div>
             </div>
@@ -42,7 +42,7 @@
               formControlName="password"
             />
             <div class="invalid-feedback">
-              <div *ngIf="password | hasError: 'required'">
+              <div *ngIf="password | hasError : 'required'">
                 Password is required
               </div>
             </div>
