@@ -37,7 +37,7 @@ export class CategoryListComponent implements OnInit {
         // .pipe(finalize(() => (this.loaderService.loaderVisible = false)))
       ).then((data) => {
         this.categories = data.items;
-        this.pagination = data.pagination;
+        this.pagination = data.pagination;                         
       });
     } catch (error) {
       handleError(null, error);
