@@ -8,26 +8,26 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/eStore.SPA" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "nuget" # See documentation for possible values
     directory: "/eStore.API" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "nuget" # See documentation for possible values
     directory: "/eStore.Domain" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "nuget" # See documentation for possible values
     directory: "/eStore.Persistence" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "nuget" # See documentation for possible values
     directory: "/eStore.Application" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "nuget" # See documentation for possible values
     directory: "/Core.Persistence" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       
 
