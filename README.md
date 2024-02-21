@@ -9,5 +9,5 @@
 │  ├── eStore.Application
 │  ├── eStore.Domain
 │  ├── eStore.Persistence
-|__ eStore.SPA
+│── eStore.SPA
 ```
