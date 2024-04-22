@@ -49,20 +49,17 @@ namespace eStore.Persistence.SeedDatabase
             {
                 var roles = new List<Role>
                 {
-                    new Role
-                    {
+                    new() {
                         Name = "Admin",
                         CreatedBy = 1,
                         CreatedOn = DateTime.UtcNow
                     },
-                    new Role
-                    {
+                    new() {
                         Name = "Customer",
                         CreatedBy = 1,
                         CreatedOn = DateTime.UtcNow
                     },
-                    new Role
-                    {
+                    new() {
                         Name = "Manager",
                         CreatedBy = 1,
                         CreatedOn = DateTime.UtcNow

@@ -26,7 +26,7 @@ namespace eStore.Domain.Entities
         public ICollection<Address>? Addresses { get; set; }
         public ICollection<Basket>? Baskets { get; set; }
 
-        private readonly List<BaseEvent> _domainEvents = new();
+        private readonly List<BaseEvent> _domainEvents = [];
 
         [NotMapped]
         public IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();

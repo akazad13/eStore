@@ -25,7 +25,7 @@ namespace eStore.Persistence.Authentication
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             var userRoles = await identityService.GetUserRoles(user);

@@ -12,7 +12,7 @@ namespace eStore.Application.Common.Behaviours
         ) : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        private readonly Stopwatch _timer = new Stopwatch();
+        private readonly Stopwatch _timer = new();
         private readonly ILogger<TRequest> _logger = logger;
         private readonly ICurrentUserService _currentUserService = currentUserService;
         private readonly IIdentityService _identityService = identityService;
