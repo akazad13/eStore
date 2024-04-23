@@ -11,13 +11,13 @@
               </a>
             </li>
             <li class="breadcrumb-item" *ngIf="breadcrumbs?.parentBreadcrumb">
-              {{ breadcrumbs?.parentBreadcrumb }}
+              {{ breadcrumbs?.parentBreadcrumb | translate }}
             </li>
             <li
               class="breadcrumb-item active"
               *ngIf="breadcrumbs?.childBreadcrumb"
             >
-              {{ breadcrumbs?.childBreadcrumb }}
+              {{ breadcrumbs?.childBreadcrumb | translate }}
             </li>
           </ol>
         </div>

@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -12,6 +12,8 @@ import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { AuthGuard } from './shared/guard/auth.guard';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 export function tokenGetter(): string {
   const storedUser = localStorage.getItem('user');
@@ -20,6 +22,10 @@ export function tokenGetter(): string {
     return user;
   }
   return user.jwt;
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
 
 @NgModule({
@@ -38,7 +44,14 @@ export function tokenGetter(): string {
         skipWhenExpired: true,
         disallowedRoutes: [`${environment.apiUrl.split('//')[1]} + /api/auth`]
       }
-    })
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      },
+    }),
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

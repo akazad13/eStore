@@ -13,7 +13,7 @@ import { Menu, NavService } from '../../services/nav.service';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-  public menuItems!: Menu[];
+  public menuItems: Menu[] = [];
   public url: any;
   public fileurl: any;
 

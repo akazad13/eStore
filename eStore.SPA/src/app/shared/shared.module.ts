@@ -18,6 +18,7 @@ import { IsInvalidPipe } from './pipes/is-invalid.pipe';
 import { HasRoleDirective } from './directives/hasRole.directive';
 import { NumberOnlyDirective } from './directives/Number-only.directive';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { TranslateModule } from '@ngx-translate/core';
 // pipes
 
 @NgModule({
@@ -35,7 +36,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     HasRoleDirective,
     NumberOnlyDirective
   ],
-  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, TranslateModule],
   exports: [
     CommonModule,
     FormsModule,

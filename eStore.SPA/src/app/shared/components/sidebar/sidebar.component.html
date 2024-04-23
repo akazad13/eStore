@@ -26,7 +26,7 @@
           (click)="toggletNavActive(menuItem)"
         >
           <span
-            ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ menuItem.title
+            ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ menuItem.title | translate
             }}<span
               class="badge badge-{{ menuItem.badgeType }} ml-3"
               *ngIf="menuItem.badgeType"
@@ -43,7 +43,7 @@
           *ngIf="menuItem.type === 'link'"
         >
           <span
-            ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ menuItem.title
+            ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ menuItem.title| translate
             }}<span
               class="badge badge-{{ menuItem.badgeType }} ml-3"
               *ngIf="menuItem.badgeType"
@@ -59,7 +59,7 @@
           *ngIf="menuItem.type === 'extLink'"
         >
           <span
-            ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ menuItem.title
+            ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ menuItem.title| translate
             }}<span
               class="badge badge-{{ menuItem.badgeType }} ml-3"
               *ngIf="menuItem.badgeType"
@@ -76,7 +76,7 @@
           *ngIf="menuItem.type === 'extTabLink'"
         >
           <span
-            ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ menuItem.title
+            ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ menuItem.title| translate
             }}<span
               class="badge badge-{{ menuItem.badgeType }} ml-3"
               *ngIf="menuItem.badgeType"
@@ -106,7 +106,7 @@
                 (click)="toggletNavActive(childrenItem)"
               >
                 <span>
-                  <i class="fa {{childrenItem.icon}}" aria-hidden="true"></i> {{ childrenItem.title }}
+                  <i class="fa {{childrenItem.icon}}" aria-hidden="true"></i> {{ childrenItem.title | translate}}
                   <span
                     class="badge badge-{{ childrenItem.badgeType }} pull-right"
                     *ngIf="childrenItem.badgeType"
@@ -126,7 +126,7 @@
                 [routerLinkActiveOptions]="{ exact: true }"
               >
                 <span
-                  ><i class="fa {{childrenItem.icon}}" aria-hidden="true"></i> {{ childrenItem.title }}
+                  ><i class="fa {{childrenItem.icon}}" aria-hidden="true"></i> {{ childrenItem.title| translate }}
                   <span
                     class="badge badge-{{ childrenItem.badgeType }} pull-right"
                     *ngIf="childrenItem.badgeType"
@@ -146,7 +146,7 @@
                 [routerLinkActiveOptions]="{ exact: true }"
               >
                 <span
-                  ><i class="fa {{childrenItem.icon}}" aria-hidden="true"></i> {{ childrenItem.title }}
+                  ><i class="fa {{childrenItem.icon}}" aria-hidden="true"></i> {{ childrenItem.title | translate}}
                   <span
                     class="badge badge-{{ childrenItem.badgeType }} pull-right"
                     *ngIf="childrenItem.badgeType"
@@ -165,7 +165,7 @@
                 *ngIf="childrenItem.type === 'extTabLink'"
               >
                 <span
-                  ><i class="fa {{childrenItem.icon}}" aria-hidden="true"></i> {{ childrenItem.title }}
+                  ><i class="fa {{childrenItem.icon}}" aria-hidden="true"></i> {{ childrenItem.title | translate}}
                   <span
                     class="badge badge-{{ childrenItem.badgeType }} pull-right"
                     *ngIf="childrenItem.badgeType"
@@ -191,7 +191,7 @@
                   >
                     <i class="fa fa-circle"></i
                     ><span>
-                      <i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ childrenSubItem.title }}
+                      <i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ childrenSubItem.title | translate}}
                       <span
                         class="badge badge-{{
                           childrenSubItem.badgeType
@@ -212,7 +212,7 @@
                   >
                     <i class="fa fa-circle"></i
                     ><span
-                      ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ childrenSubItem.title }}
+                      ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ childrenSubItem.title | translate}}
                       <span
                         class="badge badge-{{
                           childrenSubItem.badgeType
@@ -232,7 +232,7 @@
                   >
                     <i class="fa fa-circle"></i
                     ><span
-                      ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ childrenSubItem.title }}
+                      ><i class="fa {{menuItem.icon}}" aria-hidden="true"></i> {{ childrenSubItem.title | translate}}
                       <span
                         class="badge badge-{{
                           childrenSubItem.badgeType

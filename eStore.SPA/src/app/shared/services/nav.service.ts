@@ -3,10 +3,10 @@ import { BehaviorSubject, Observable, Subscriber } from 'rxjs';
 
 // Menu
 export interface Menu {
-  path?: string;
-  title?: string;
-  icon?: string;
-  type?: string;
+  path: string;
+  title: string;
+  icon: string;
+  type: string;
   badgeType?: string;
   badgeValue?: string;
   active?: boolean;

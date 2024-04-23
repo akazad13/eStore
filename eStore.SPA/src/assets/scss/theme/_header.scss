@@ -568,7 +568,9 @@ $header-size: 60px;
     li{
       display: inline-block;
       position: relative;
-
+      .language-dropdown li {
+        display: block;
+      }
     }
   }
 }

@@ -11,6 +11,7 @@ import { DOCUMENT } from '@angular/common';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { IAuthApi } from 'src/app/api';
+import { TranslateService } from '@ngx-translate/core';
 
 const body = document.getElementsByTagName('body')[0];
 
@@ -32,12 +33,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() rightSidebarEvent = new EventEmitter<boolean>();
   private destroy$: Subject<void> = new Subject<void>();
 
+  lang: string = "en";
+
   constructor(
     public navServices: NavService,
     @Inject(DOCUMENT) private document: any,
     private authApi: IAuthApi,
-    private router: Router
-  ) {}
+    private router: Router,
+    private translate: TranslateService,
+  ) { translate.setDefaultLang('en');}
 
   ngOnDestroy(): void {
     this.removeFix();
@@ -56,6 +60,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   openMobileNav(): void {
     this.openNav = !this.openNav;
+  }
+  public changeLanguage(lang : string) {
+    this.translate.use(lang);
+    this.lang = lang;
+    
   }
 
   searchTerm(term: any): any {
