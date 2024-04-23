@@ -13,6 +13,7 @@ namespace eStore.Domain.Entities
         public bool IsSubscribeToNewsletter { get; set; } = false;
         public DateTime? Birthdate { get; set; }
         public byte Gender { get; set; }
+        public string? Locale { get; set; }
         public DateTimeOffset CreatedOn { get; set; }
         public long CreatedBy { get; set; }
         public DateTimeOffset? ModifiedOn { get; set; }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eStore.API.Controllers
 {
+    [Route("api/category")]
     public class CategoryController : ApiControllerBase
     {
         [HttpGet]

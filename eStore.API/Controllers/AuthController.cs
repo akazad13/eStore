@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eStore.API.Controllers
 {
+    [Route("api/auth")]
     [AllowAnonymous]
     public class AuthController : ApiControllerBase
     {
@@ -15,7 +16,7 @@ namespace eStore.API.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> Signup(UserSignupCommandRequest commnad)
+        public async Task<IActionResult> Signup(UserSignupCommand commnad)
         {
             return (await Mediator.Send(commnad)).Match<IActionResult>(Ok, BadRequest);
         }

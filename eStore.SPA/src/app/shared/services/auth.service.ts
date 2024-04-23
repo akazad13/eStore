@@ -22,6 +22,22 @@ export class AuthService {
     return user.firstName;
   }
 
+  getCurrentUserLocale(): string {
+    const user = this.getStoredUser();
+    if (user == null) {
+      return user;
+    }
+    return user.locale;
+  }
+  setCurrentUserLocale(locale : string) {
+    const user = this.getStoredUser();
+    if (user == null) {
+      return user;
+    }
+    user.locale = locale;
+    this.SetUserToStore(user);
+  }
+
   getDecodedToken(): any {
     const user = this.getStoredUser();
     if (user == null) {
@@ -80,5 +96,8 @@ export class AuthService {
   private getStoredUser() {
     const storedUser = localStorage.getItem('user');
     return storedUser == null ? null : JSON.parse(storedUser);
+  }
+  private SetUserToStore(user: any) {
+    localStorage.setItem('user', JSON.stringify(user));
   }
 }

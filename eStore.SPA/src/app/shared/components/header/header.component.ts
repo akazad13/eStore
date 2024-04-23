@@ -8,10 +8,12 @@ import {
 } from '@angular/core';
 import { NavService, Menu } from '../../services/nav.service';
 import { DOCUMENT } from '@angular/common';
-import { Subject } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
-import { IAuthApi } from 'src/app/api';
+import { IAuthApi, IUserApi } from 'src/app/api';
 import { TranslateService } from '@ngx-translate/core';
+import { handleError } from '../../functions/error-handler';
+import { AuthService } from '../../services/auth.service';
 
 const body = document.getElementsByTagName('body')[0];
 
@@ -39,9 +41,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public navServices: NavService,
     @Inject(DOCUMENT) private document: any,
     private authApi: IAuthApi,
+    private userApi: IUserApi,
     private router: Router,
     private translate: TranslateService,
-  ) { translate.setDefaultLang('en');}
+    private authService: AuthService,
+  ) {
+    this.lang = this.authService.getCurrentUserLocale() || "en"; 
+    translate.setDefaultLang(this.lang);
+  }
 
   ngOnDestroy(): void {
     this.removeFix();
@@ -61,10 +68,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   openMobileNav(): void {
     this.openNav = !this.openNav;
   }
-  public changeLanguage(lang : string) {
+  public async changeLanguage(lang : string) {
     this.translate.use(lang);
     this.lang = lang;
-    
+    try {
+      const data = await firstValueFrom(
+        this.userApi.Update(this.authService.getCurrentUserId(), lang)
+      );
+      this.authService.setCurrentUserLocale(lang);
+    } catch (error) {
+      handleError(null, error);
+    }
   }
 
   searchTerm(term: any): any {

@@ -6,6 +6,7 @@ namespace eStore.Application.Common.Interfaces
     public interface IIdentityService
     {
         Task<AppUser?> AuthenticateUser(string email, string password);
+        Task<AppUser> GetUserAsync(long userId);
         Task<bool> IsUserExist(string? email);
         Task<string> GetUserNameAsync(long userId);
         Task<IList<string>> GetUserRoles(AppUser user);
@@ -22,6 +23,7 @@ namespace eStore.Application.Common.Interfaces
             IEnumerable<string> assignedRoles
         );
 
+        Task<Result> UpdateUserAsync(AppUser user);
         Task<Result> DeleteUserAsync(long userId);
     }
 }

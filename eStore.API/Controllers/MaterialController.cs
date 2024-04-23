@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eStore.API.Controllers
 {
+    [Route("api/material")]
     public class MaterialController : ApiControllerBase
     {
         [HttpGet("search")]

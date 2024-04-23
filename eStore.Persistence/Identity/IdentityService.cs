@@ -39,6 +39,11 @@ namespace eStore.Infrastructure.Identity
             return user != null ? user.UserName?? "" : "";
         }
 
+        public Task<AppUser> GetUserAsync(long userId)
+        {
+           return userManager.Users.FirstAsync(u => u.Id == userId);
+        }
+
         public Task<IList<string>> GetUserRoles(AppUser user)
         {
             return userManager.GetRolesAsync(user);
@@ -105,6 +110,13 @@ namespace eStore.Infrastructure.Identity
         public async Task<Result> DeleteUserAsync(AppUser user)
         {
             var result = await userManager.DeleteAsync(user);
+
+            return result.ToApplicationResult();
+        }
+
+        public async Task<Result> UpdateUserAsync(AppUser user)
+        {
+            var result = await userManager.UpdateAsync(user);
 
             return result.ToApplicationResult();
         }

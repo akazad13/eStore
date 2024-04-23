@@ -9,7 +9,7 @@ namespace eStore.Application.Common.Mapper.Profiles
         #region Ctor
         public ProductProfile()
         {
-            CreateMap<CreateProductCommandRequest, Product>();
+            CreateMap<CreateProductCommand, Product>();
         }
         #endregion
 

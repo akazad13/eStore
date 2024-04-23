@@ -2,13 +2,12 @@
 using eStore.Application.Common.Wrappers;
 using MediatR;
 
-namespace eStore.Application.CQRS.Authentication.Commands.Signup
-{
+namespace eStore.Application.CQRS.Authentication.Commands.Signup;
     public class UserSignupCommandHandler(IIdentityService identityService)
-                : IRequestHandler<UserSignupCommandRequest, IResult<GenericResponse>>
+                : IRequestHandler<UserSignupCommand, IResult<GenericResponse>>
     {
         public async Task<IResult<GenericResponse>> Handle(
-            UserSignupCommandRequest request,
+            UserSignupCommand request,
             CancellationToken cancellationToken
         )
         {
@@ -39,4 +38,3 @@ namespace eStore.Application.CQRS.Authentication.Commands.Signup
             }
         }
     }
-}

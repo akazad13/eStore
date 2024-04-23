@@ -6,20 +6,20 @@ using eStore.Domain.Entities;
 using eStore.Domain.Enums;
 using MediatR;
 
-namespace eStore.Application.CQRS.Product.Commands.CreateProduct
-{
-    public class CreateProductCommandHandler(
+namespace eStore.Application.CQRS.Product.Commands.CreateProduct;
+
+public class CreateProductCommandHandler(
         IProductRepository productRepository,
         IMapper mapper,
         IAwsS3Service AWSS3Service,
         IProductImageRepository productImageRepository
         )
-                : IRequestHandler<CreateProductCommandRequest, IResult<GenericResponse>>
+                : IRequestHandler<CreateProductCommand, IResult<GenericResponse>>
     {
         private readonly IAwsS3Service _AWSS3Service = AWSS3Service;
 
         public async Task<IResult<GenericResponse>> Handle(
-            CreateProductCommandRequest request,
+            CreateProductCommand request,
             CancellationToken cancellationToken
         )
         {
@@ -70,4 +70,3 @@ namespace eStore.Application.CQRS.Product.Commands.CreateProduct
             }
         }
     }
-}

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eStore.API.Controllers
 {
+    [Route("api/product")]
     public class ProductController : ApiControllerBase
     {
         [HttpGet]
@@ -30,7 +31,7 @@ namespace eStore.API.Controllers
 
         [HttpPost]
         [RequestSizeLimit(long.MaxValue)]
-        public async Task<IActionResult> Create([FromForm] CreateProductCommandRequest commnad)
+        public async Task<IActionResult> Create([FromForm] CreateProductCommand commnad)
         {
             return (await Mediator.Send(commnad)).Match<IActionResult>(Ok, BadRequest);
         }

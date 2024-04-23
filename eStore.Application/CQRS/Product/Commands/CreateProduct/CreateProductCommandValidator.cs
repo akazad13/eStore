@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace eStore.Application.CQRS.Product.Commands.CreateProduct
+namespace eStore.Application.CQRS.Product.Commands.CreateProduct;
+
+public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {
-    public class CreateProductCommandValidator : AbstractValidator<CreateProductCommandRequest>
+    public CreateProductCommandValidator()
     {
-        public CreateProductCommandValidator()
-        {
-            RuleFor(v => v.Name).MaximumLength(200).NotEmpty();
-        }
+        RuleFor(v => v.Name).MaximumLength(200).NotEmpty();
     }
 }

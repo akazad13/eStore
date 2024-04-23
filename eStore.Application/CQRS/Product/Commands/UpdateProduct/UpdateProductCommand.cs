@@ -1,3 +1,3 @@
 ﻿namespace eStore.Application.CQRS.Product.Commands.UpdateProduct;
 
-public class UpdateProductCommandHandler { }
+public class UpdateProductCommand { }
